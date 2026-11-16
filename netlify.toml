@@ -1,0 +1,16 @@
+[build]
+  publish = "public"
+  functions = "netlify/functions"
+
+[functions]
+  node_bundler = "esbuild"
+  included_files = ["public/data/seed.json", "public/data/hafiza-baslangic.json", "public/data/kaynak.json"]
+
+[[edge_functions]]
+  path = "/*"
+  function = "auth"
+
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200

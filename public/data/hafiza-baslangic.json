@@ -1,0 +1,969 @@
+{
+ "ADGYO": {
+  "id": "kira-ADGYO-2026Q3",
+  "k": "ADGYO",
+  "konu": "Kira geliri tespiti",
+  "donem": "9A26",
+  "oneri": {
+   "tip": "tutar",
+   "tutar": 329523315,
+   "not": "Hasılat dipnotu: \"Yurt içi satışlar – Kira Gelirleri\" (kalan: bina satış gelirleri)"
+  },
+  "kaynakIdx": 1692605,
+  "kalicilik": "Bu dönem",
+  "durum": "onaylandi",
+  "onaylayan": "İlk tarama (dipnotta açık kira kalemi)",
+  "tarih": "2026-11-11",
+  "sonucuDegistirir": false,
+  "notlar": []
+ },
+ "AAGYO": {
+  "id": "kira-AAGYO-2026Q3",
+  "k": "AAGYO",
+  "konu": "Kira geliri tespiti",
+  "donem": "9A26",
+  "oneri": {
+   "tip": "tutar",
+   "tutar": 327793474,
+   "not": "Hasılat dipnotu: \"Kira Gelirleri\""
+  },
+  "kaynakIdx": 1690231,
+  "kalicilik": "Bu dönem",
+  "durum": "onaylandi",
+  "onaylayan": "İlk tarama (dipnotta açık kira kalemi)",
+  "tarih": "2026-11-11",
+  "sonucuDegistirir": false,
+  "notlar": []
+ },
+ "AHSGY": {
+  "id": "kira-AHSGY-2026Q3",
+  "k": "AHSGY",
+  "konu": "Kira geliri tespiti",
+  "donem": "9A26",
+  "oneri": {
+   "tip": "tutar",
+   "tutar": 100323714,
+   "not": "Hasılat dipnotu: \"Kira gelirleri\""
+  },
+  "kaynakIdx": 1690245,
+  "kalicilik": "Bu dönem",
+  "durum": "onaylandi",
+  "onaylayan": "İlk tarama (dipnotta açık kira kalemi)",
+  "tarih": "2026-11-11",
+  "sonucuDegistirir": false,
+  "notlar": []
+ },
+ "AKFGY": {
+  "id": "kira-AKFGY-2026Q3",
+  "k": "AKFGY",
+  "konu": "Kira geliri tespiti",
+  "donem": "9A26",
+  "oneri": {
+   "tip": "tamami",
+   "not": "Otel + Terminal Kadıköy + Yurt kira gelirleri (hasılatın tamamı)"
+  },
+  "kaynakIdx": 1685980,
+  "kalicilik": "Kalıcı (sonraki dönemlerde de uygulanır)",
+  "durum": "onaylandi",
+  "onaylayan": "İlk tarama (dipnotta açık kira kalemi)",
+  "tarih": "2026-11-11",
+  "sonucuDegistirir": false,
+  "notlar": []
+ },
+ "AKSGY": {
+  "id": "kira-AKSGY-2026Q3",
+  "k": "AKSGY",
+  "konu": "Kira geliri tespiti",
+  "donem": "9A26",
+  "oneri": {
+   "tip": "tutar",
+   "tutar": 3788933000,
+   "not": "Akasya + Akbatı + diğer kira gelirleri (dipnot bin TL)"
+  },
+  "kaynakIdx": 1694356,
+  "kalicilik": "Bu dönem",
+  "durum": "onaylandi",
+  "onaylayan": "İlk tarama (dipnotta açık kira kalemi)",
+  "tarih": "2026-11-11",
+  "sonucuDegistirir": false,
+  "notlar": []
+ },
+ "AKMGY": {
+  "id": "kira-AKMGY-2026Q3",
+  "k": "AKMGY",
+  "konu": "Kira geliri tespiti",
+  "donem": "9A26",
+  "oneri": {
+   "tip": "tutar",
+   "tutar": 899164000,
+   "not": "Mağaza/depo kira + apart otel kira geliri (dipnot bin TL)"
+  },
+  "kaynakIdx": 1694264,
+  "kalicilik": "Bu dönem",
+  "durum": "onaylandi",
+  "onaylayan": "İlk tarama (dipnotta açık kira kalemi)",
+  "tarih": "2026-11-11",
+  "sonucuDegistirir": false,
+  "notlar": []
+ },
+ "ALGYO": {
+  "id": "kira-ALGYO-2026Q3",
+  "k": "ALGYO",
+  "konu": "Kira geliri tespiti",
+  "donem": "9A26",
+  "oneri": {
+   "tip": "tutar",
+   "tutar": 540241332,
+   "not": "Hasılat dipnotu: \"Kira gelirleri\""
+  },
+  "kaynakIdx": 1688519,
+  "kalicilik": "Bu dönem",
+  "durum": "onaylandi",
+  "onaylayan": "İlk tarama (dipnotta açık kira kalemi)",
+  "tarih": "2026-11-11",
+  "sonucuDegistirir": false,
+  "notlar": []
+ },
+ "ASGYO": {
+  "id": "kira-ASGYO-2026Q3",
+  "k": "ASGYO",
+  "konu": "Kira geliri tespiti",
+  "donem": "9A26",
+  "oneri": {
+   "tip": "tutar",
+   "tutar": 124593020,
+   "not": "\"Konut kira gelirleri\" (kalan: tamamlanmış gayrimenkul satışları)"
+  },
+  "kaynakIdx": 1689927,
+  "kalicilik": "Bu dönem",
+  "durum": "onaylandi",
+  "onaylayan": "İlk tarama (dipnotta açık kira kalemi)",
+  "tarih": "2026-11-11",
+  "sonucuDegistirir": false,
+  "notlar": []
+ },
+ "ATAGY": {
+  "id": "kira-ATAGY-2026Q3",
+  "k": "ATAGY",
+  "konu": "Kira geliri tespiti",
+  "donem": "9A26",
+  "oneri": {
+   "tip": "tutar",
+   "tutar": 37325253,
+   "not": "Hasılat dipnotu: \"Kira gelirleri\""
+  },
+  "kaynakIdx": 1690235,
+  "kalicilik": "Bu dönem",
+  "durum": "onaylandi",
+  "onaylayan": "İlk tarama (dipnotta açık kira kalemi)",
+  "tarih": "2026-11-11",
+  "sonucuDegistirir": false,
+  "notlar": []
+ },
+ "AGYO": {
+  "id": "kira-AGYO-2026Q3",
+  "k": "AGYO",
+  "konu": "Kira geliri tespiti",
+  "donem": "9A26",
+  "oneri": {
+   "tip": "tutar",
+   "tutar": 286657414,
+   "not": "Hasılat dipnotu: \"Kira gelirleri\""
+  },
+  "kaynakIdx": 1694060,
+  "kalicilik": "Bu dönem",
+  "durum": "onaylandi",
+  "onaylayan": "İlk tarama (dipnotta açık kira kalemi)",
+  "tarih": "2026-11-11",
+  "sonucuDegistirir": false,
+  "notlar": []
+ },
+ "AVGYO": {
+  "id": "kira-AVGYO-2026Q3",
+  "k": "AVGYO",
+  "konu": "Kira geliri tespiti",
+  "donem": "9A26",
+  "oneri": {
+   "tip": "tamami",
+   "not": "Hasılatın tamamı kira geliri"
+  },
+  "kaynakIdx": 1695905,
+  "kalicilik": "Kalıcı (sonraki dönemlerde de uygulanır)",
+  "durum": "onaylandi",
+  "onaylayan": "İlk tarama (dipnotta açık kira kalemi)",
+  "tarih": "2026-11-11",
+  "sonucuDegistirir": false,
+  "notlar": []
+ },
+ "AVPGY": {
+  "id": "kira-AVPGY-2026Q3",
+  "k": "AVPGY",
+  "konu": "Kira geliri tespiti",
+  "donem": "9A26",
+  "oneri": {
+   "tip": "tutar",
+   "tutar": 2577540603,
+   "not": "Hasılat dipnotu: \"Kira gelirleri\" (kalan: konut satışları)"
+  },
+  "kaynakIdx": 1689972,
+  "kalicilik": "Bu dönem",
+  "durum": "onaylandi",
+  "onaylayan": "İlk tarama (dipnotta açık kira kalemi)",
+  "tarih": "2026-11-11",
+  "sonucuDegistirir": false,
+  "notlar": []
+ },
+ "BKRGY": {
+  "id": "kira-BKRGY-2026Q3",
+  "k": "BKRGY",
+  "konu": "Kira geliri tespiti",
+  "donem": "9A26",
+  "oneri": {
+   "tip": "tutar",
+   "tutar": 17523392,
+   "not": "Hasılat dipnotu: \"Kira gelirleri\" — oran %15 eşiğinin hemen altında"
+  },
+  "kaynakIdx": 1690002,
+  "kalicilik": "Bu dönem",
+  "durum": "onaylandi",
+  "onaylayan": "İlk tarama (dipnotta açık kira kalemi)",
+  "tarih": "2026-11-11",
+  "sonucuDegistirir": false,
+  "notlar": []
+ },
+ "BASGZ": {
+  "id": "kira-BASGZ-2026Q3",
+  "k": "BASGZ",
+  "konu": "Kira geliri tespiti",
+  "donem": "9A26",
+  "oneri": {
+   "tip": "sifir",
+   "not": "Hasılatın tamamı doğalgaz dağıtım/satış geliri; kira geliri yok"
+  },
+  "kaynakIdx": 1688401,
+  "kalicilik": "Kalıcı (sonraki dönemlerde de uygulanır)",
+  "durum": "onaylandi",
+  "onaylayan": "İlk tarama (dipnotta açık kira kalemi)",
+  "tarih": "2026-11-11",
+  "sonucuDegistirir": false,
+  "notlar": []
+ },
+ "BEGYO": {
+  "id": "kira-BEGYO-2026Q3",
+  "k": "BEGYO",
+  "konu": "Kira geliri tespiti",
+  "donem": "9A26",
+  "oneri": {
+   "tip": "tamami",
+   "not": "9A26 dipnotunda kırılım yok. Stoklardaki azalış yalnızca 3,3 mn TL, gelir kaynakları Aqua Mall AVM + Metro kiraları; hasılat kira kabul edildi. FY25 PDF taranmış görüntü, doğrulanamadı.",
+   "cikarim": true
+  },
+  "kaynakIdx": 1690128,
+  "kalicilik": "Kalıcı (sonraki dönemlerde de uygulanır)",
+  "durum": "bekliyor",
+  "onaylayan": null,
+  "tarih": null,
+  "sonucuDegistirir": false,
+  "notlar": []
+ },
+ "DZGYO": {
+  "id": "kira-DZGYO-2026Q3",
+  "k": "DZGYO",
+  "konu": "Kira geliri tespiti",
+  "donem": "9A26",
+  "oneri": {
+   "tip": "tutar",
+   "tutar": 201079087,
+   "not": "Hasılat dipnotu: \"Kira geliri\""
+  },
+  "kaynakIdx": 1686052,
+  "kalicilik": "Bu dönem",
+  "durum": "onaylandi",
+  "onaylayan": "İlk tarama (dipnotta açık kira kalemi)",
+  "tarih": "2026-11-11",
+  "sonucuDegistirir": false,
+  "notlar": []
+ },
+ "DGGYO": {
+  "id": "kira-DGGYO-2026Q3",
+  "k": "DGGYO",
+  "konu": "Kira geliri tespiti",
+  "donem": "9A26",
+  "oneri": {
+   "tip": "tamami",
+   "not": "Hasılatın tamamı kira geliri"
+  },
+  "kaynakIdx": 1694236,
+  "kalicilik": "Kalıcı (sonraki dönemlerde de uygulanır)",
+  "durum": "onaylandi",
+  "onaylayan": "İlk tarama (dipnotta açık kira kalemi)",
+  "tarih": "2026-11-11",
+  "sonucuDegistirir": false,
+  "notlar": []
+ },
+ "EGEGY": {
+  "id": "kira-EGEGY-2026Q3",
+  "k": "EGEGY",
+  "konu": "Kira geliri tespiti",
+  "donem": "9A26",
+  "oneri": {
+   "tip": "tutar",
+   "tutar": 11602124,
+   "not": "Hasılat dipnotu: \"Kira gelirleri\" (hasılatın büyük kısmı konut satışı)"
+  },
+  "kaynakIdx": 1690218,
+  "kalicilik": "Bu dönem",
+  "durum": "onaylandi",
+  "onaylayan": "İlk tarama (dipnotta açık kira kalemi)",
+  "tarih": "2026-11-11",
+  "sonucuDegistirir": false,
+  "notlar": []
+ },
+ "EKGYO": {
+  "id": "kira-EKGYO-2026Q3",
+  "k": "EKGYO",
+  "konu": "Kira geliri tespiti",
+  "donem": "9A26",
+  "oneri": {
+   "tip": "tutar",
+   "tutar": 325930000,
+   "not": "Hasılat dipnotu: \"Kira gelirleri\" (bin TL) — hasılatın neredeyse tamamı konut/arsa satışı"
+  },
+  "kaynakIdx": 1694500,
+  "kalicilik": "Bu dönem",
+  "durum": "onaylandi",
+  "onaylayan": "İlk tarama (dipnotta açık kira kalemi)",
+  "tarih": "2026-11-11",
+  "sonucuDegistirir": false,
+  "notlar": []
+ },
+ "EYGYO": {
+  "id": "kira-EYGYO-2026Q3",
+  "k": "EYGYO",
+  "konu": "Kira geliri tespiti",
+  "donem": "9A26",
+  "oneri": {
+   "tip": "tutar",
+   "tutar": 24539950,
+   "not": "\"Gayrimenkul Kira Geliri\""
+  },
+  "kaynakIdx": 1695865,
+  "kalicilik": "Bu dönem",
+  "durum": "onaylandi",
+  "onaylayan": "İlk tarama (dipnotta açık kira kalemi)",
+  "tarih": "2026-11-11",
+  "sonucuDegistirir": false,
+  "notlar": []
+ },
+ "FZLGY": {
+  "id": "kira-FZLGY-2026Q3",
+  "k": "FZLGY",
+  "konu": "Kira geliri tespiti",
+  "donem": "9A26",
+  "oneri": {
+   "tip": "tutar",
+   "tutar": 23648230,
+   "not": "\"Kira gelirleri\" (hasılatın büyük kısmı konut satışı)"
+  },
+  "kaynakIdx": 1694372,
+  "kalicilik": "Bu dönem",
+  "durum": "onaylandi",
+  "onaylayan": "İlk tarama (dipnotta açık kira kalemi)",
+  "tarih": "2026-11-11",
+  "sonucuDegistirir": false,
+  "notlar": []
+ },
+ "HLGYO": {
+  "id": "kira-HLGYO-2026Q3",
+  "k": "HLGYO",
+  "konu": "Kira geliri tespiti",
+  "donem": "9A26",
+  "oneri": {
+   "tip": "tutar",
+   "tutar": 1596323167,
+   "not": "Hasılat dipnotu: \"Kira gelirleri\" (kalan: proje konut/ticari ünite satışları)"
+  },
+  "kaynakIdx": 1694222,
+  "kalicilik": "Bu dönem",
+  "durum": "onaylandi",
+  "onaylayan": "İlk tarama (dipnotta açık kira kalemi)",
+  "tarih": "2026-11-11",
+  "sonucuDegistirir": false,
+  "notlar": []
+ },
+ "IDGYO": {
+  "id": "kira-IDGYO-2026Q3",
+  "k": "IDGYO",
+  "konu": "Kira geliri tespiti",
+  "donem": "9A26",
+  "oneri": {
+   "tip": "tamami",
+   "not": "9A26 dipnotu sadece \"Yurtiçi satışlar\" diyor ve satış maliyeti 0. FY25 dipnotunda aynı kalem \"Kira gelirleri\" (3,65 mn TL) olduğundan kira kabul edildi.",
+   "cikarim": true
+  },
+  "kaynakIdx": 1690011,
+  "kalicilik": "Kalıcı (sonraki dönemlerde de uygulanır)",
+  "durum": "bekliyor",
+  "onaylayan": null,
+  "tarih": null,
+  "sonucuDegistirir": false,
+  "notlar": []
+ },
+ "ISGYO": {
+  "id": "kira-ISGYO-2026Q3",
+  "k": "ISGYO",
+  "konu": "Kira geliri tespiti",
+  "donem": "9A26",
+  "oneri": {
+   "tip": "tutar",
+   "tutar": 1632222400,
+   "not": "Hasılat dipnotu: \"Kira gelirleri\""
+  },
+  "kaynakIdx": 1688356,
+  "kalicilik": "Bu dönem",
+  "durum": "onaylandi",
+  "onaylayan": "İlk tarama (dipnotta açık kira kalemi)",
+  "tarih": "2026-11-11",
+  "sonucuDegistirir": false,
+  "notlar": []
+ },
+ "KZBGY": {
+  "id": "kira-KZBGY-2026Q3",
+  "k": "KZBGY",
+  "konu": "Kira geliri tespiti",
+  "donem": "9A26",
+  "oneri": {
+   "tip": "sifir",
+   "not": "Dipnot: \"Grup'un hasılatlarının %99'u gayrimenkul ve arsa satışlarından\" — kira en fazla %1"
+  },
+  "kaynakIdx": 1694580,
+  "kalicilik": "Kalıcı (sonraki dönemlerde de uygulanır)",
+  "durum": "onaylandi",
+  "onaylayan": "İlk tarama (dipnotta açık kira kalemi)",
+  "tarih": "2026-11-11",
+  "sonucuDegistirir": false,
+  "notlar": []
+ },
+ "KLGYO": {
+  "id": "kira-KLGYO-2026Q3",
+  "k": "KLGYO",
+  "konu": "Kira geliri tespiti",
+  "donem": "9A26",
+  "oneri": {
+   "tip": "sifir",
+   "not": "Hasılat proje satışlarından oluşuyor (proje bazlı tablo); kira geliri yok"
+  },
+  "kaynakIdx": 1685525,
+  "kalicilik": "Kalıcı (sonraki dönemlerde de uygulanır)",
+  "durum": "onaylandi",
+  "onaylayan": "İlk tarama (dipnotta açık kira kalemi)",
+  "tarih": "2026-11-11",
+  "sonucuDegistirir": false,
+  "notlar": []
+ },
+ "KGYO": {
+  "id": "kira-KGYO-2026Q3",
+  "k": "KGYO",
+  "konu": "Kira geliri tespiti",
+  "donem": "9A26",
+  "oneri": {
+   "tip": "tutar",
+   "tutar": 45194465,
+   "not": "\"Kira gelirleri\" (hasılatın büyük kısmı taahhüt/konut)"
+  },
+  "kaynakIdx": 1695322,
+  "kalicilik": "Bu dönem",
+  "durum": "onaylandi",
+  "onaylayan": "İlk tarama (dipnotta açık kira kalemi)",
+  "tarih": "2026-11-11",
+  "sonucuDegistirir": false,
+  "notlar": []
+ },
+ "KRGYO": {
+  "id": "kira-KRGYO-2026Q3",
+  "k": "KRGYO",
+  "konu": "Kira geliri tespiti",
+  "donem": "9A26",
+  "oneri": {
+   "tip": "tutar",
+   "tutar": 36060590,
+   "not": "Devremülk/konut kira + yatırım amaçlı gayrimenkul kira geliri"
+  },
+  "kaynakIdx": 1688584,
+  "kalicilik": "Bu dönem",
+  "durum": "onaylandi",
+  "onaylayan": "İlk tarama (dipnotta açık kira kalemi)",
+  "tarih": "2026-11-11",
+  "sonucuDegistirir": false,
+  "notlar": []
+ },
+ "KZGYO": {
+  "id": "kira-KZGYO-2026Q3",
+  "k": "KZGYO",
+  "konu": "Kira geliri tespiti",
+  "donem": "9A26",
+  "oneri": {
+   "tip": "sifir",
+   "not": "Hasılatın tamamı bağlı ortaklığın otel İŞLETMECİLİĞİ geliri; kira geliri olarak sayılmadı. Kira sayılırsa filtreyi geçer.",
+   "cikarim": true,
+   "sonucuDegistirir": true
+  },
+  "kaynakIdx": 1695995,
+  "kalicilik": "Kalıcı (sonraki dönemlerde de uygulanır)",
+  "durum": "bekliyor",
+  "onaylayan": null,
+  "tarih": null,
+  "sonucuDegistirir": true,
+  "notlar": []
+ },
+ "LXGYO": {
+  "id": "kira-LXGYO-2026Q3",
+  "k": "LXGYO",
+  "konu": "Kira geliri tespiti",
+  "donem": "9A26",
+  "oneri": {
+   "tip": "sifir",
+   "not": "Hasılat tamamen proje satışları (Nevbahar, Bahçeport)"
+  },
+  "kaynakIdx": 1695378,
+  "kalicilik": "Kalıcı (sonraki dönemlerde de uygulanır)",
+  "durum": "onaylandi",
+  "onaylayan": "İlk tarama (dipnotta açık kira kalemi)",
+  "tarih": "2026-11-11",
+  "sonucuDegistirir": false,
+  "notlar": []
+ },
+ "MRGYO": {
+  "id": "kira-MRGYO-2026Q3",
+  "k": "MRGYO",
+  "konu": "Kira geliri tespiti",
+  "donem": "6A26",
+  "oneri": {
+   "tip": "tamami",
+   "not": "\"Yurtiçi Satışlar (Kira Geliri)\" — hasılatın tamamı"
+  },
+  "kaynakIdx": 1696000,
+  "kalicilik": "Kalıcı (sonraki dönemlerde de uygulanır)",
+  "durum": "onaylandi",
+  "onaylayan": "İlk tarama (dipnotta açık kira kalemi)",
+  "tarih": "2026-11-11",
+  "sonucuDegistirir": false,
+  "notlar": []
+ },
+ "MHRGY": {
+  "id": "kira-MHRGY-2026Q3",
+  "k": "MHRGY",
+  "konu": "Kira geliri tespiti",
+  "donem": "9A26",
+  "oneri": {
+   "tip": "tamami",
+   "not": "Dipnot sadece \"Yurtiçi satışlar\" diyor. Muhasebe politikasında tanımlı tek hasılat türü \"gayrimenkul kiralamalarından elde edilen kira gelirleri\", bu yüzden tamamı kira kabul edildi.",
+   "cikarim": true
+  },
+  "kaynakIdx": 1688467,
+  "kalicilik": "Kalıcı (sonraki dönemlerde de uygulanır)",
+  "durum": "bekliyor",
+  "onaylayan": null,
+  "tarih": null,
+  "sonucuDegistirir": false,
+  "notlar": []
+ },
+ "MSGYO": {
+  "id": "kira-MSGYO-2026Q3",
+  "k": "MSGYO",
+  "konu": "Kira geliri tespiti",
+  "donem": "9A26",
+  "oneri": {
+   "tip": "tutar",
+   "tutar": 124667559,
+   "not": "Kira gelirleri − kira iadeleri"
+  },
+  "kaynakIdx": 1687573,
+  "kalicilik": "Bu dönem",
+  "durum": "onaylandi",
+  "onaylayan": "İlk tarama (dipnotta açık kira kalemi)",
+  "tarih": "2026-11-11",
+  "sonucuDegistirir": false,
+  "notlar": []
+ },
+ "NUGYO": {
+  "id": "kira-NUGYO-2026Q3",
+  "k": "NUGYO",
+  "konu": "Kira geliri tespiti",
+  "donem": "9A26",
+  "oneri": {
+   "tip": "tutar",
+   "tutar": 161627493,
+   "not": "Hasılat dipnotu: \"Kira gelirleri\""
+  },
+  "kaynakIdx": 1688492,
+  "kalicilik": "Bu dönem",
+  "durum": "onaylandi",
+  "onaylayan": "İlk tarama (dipnotta açık kira kalemi)",
+  "tarih": "2026-11-11",
+  "sonucuDegistirir": false,
+  "notlar": []
+ },
+ "OZKGY": {
+  "id": "kira-OZKGY-2026Q3",
+  "k": "OZKGY",
+  "konu": "Kira geliri tespiti",
+  "donem": "9A26",
+  "oneri": {
+   "tip": "tutar",
+   "tutar": 1123271504,
+   "not": "\"Kira geliri\" (otelcilik geliri ve konut/ofis satışları hariç). Hasılatın 2,7 mlr TL'si otelcilik (işletme) geliri, kira sayılmadı.",
+   "cikarim": true
+  },
+  "kaynakIdx": 1695976,
+  "kalicilik": "Bu dönem",
+  "durum": "bekliyor",
+  "onaylayan": null,
+  "tarih": null,
+  "sonucuDegistirir": false,
+  "notlar": []
+ },
+ "OZGYO": {
+  "id": "kira-OZGYO-2026Q3",
+  "k": "OZGYO",
+  "konu": "Kira geliri tespiti",
+  "donem": "9A26",
+  "oneri": {
+   "tip": "tutar",
+   "tutar": 171434255,
+   "not": "Kira gelirleri Türkiye + İngiltere"
+  },
+  "kaynakIdx": 1695814,
+  "kalicilik": "Bu dönem",
+  "durum": "onaylandi",
+  "onaylayan": "İlk tarama (dipnotta açık kira kalemi)",
+  "tarih": "2026-11-11",
+  "sonucuDegistirir": false,
+  "notlar": []
+ },
+ "PAGYO": {
+  "id": "kira-PAGYO-2026Q3",
+  "k": "PAGYO",
+  "konu": "Kira geliri tespiti",
+  "donem": "9A26",
+  "oneri": {
+   "tip": "tutar",
+   "tutar": 912987068,
+   "not": "Hasılat dipnotu: \"Kira gelirleri\""
+  },
+  "kaynakIdx": 1694276,
+  "kalicilik": "Bu dönem",
+  "durum": "onaylandi",
+  "onaylayan": "İlk tarama (dipnotta açık kira kalemi)",
+  "tarih": "2026-11-11",
+  "sonucuDegistirir": false,
+  "notlar": []
+ },
+ "PSGYO": {
+  "id": "kira-PSGYO-2026Q3",
+  "k": "PSGYO",
+  "konu": "Kira geliri tespiti",
+  "donem": "9A26",
+  "oneri": {
+   "tip": "sifir",
+   "not": "9A26 dipnotunda yalnızca \"Yurtiçi satışlar\"; FY25 dipnotu bunları \"gayrimenkul satış gelirleri\" olarak tanımlıyor. Kira yok kabul edildi.",
+   "cikarim": true
+  },
+  "kaynakIdx": 1695850,
+  "kalicilik": "Kalıcı (sonraki dönemlerde de uygulanır)",
+  "durum": "bekliyor",
+  "onaylayan": null,
+  "tarih": null,
+  "sonucuDegistirir": false,
+  "notlar": []
+ },
+ "PEKGY": {
+  "id": "kira-PEKGY-2026Q3",
+  "k": "PEKGY",
+  "konu": "Kira geliri tespiti",
+  "donem": "6A26",
+  "oneri": {
+   "tip": "tutar",
+   "tutar": 10482293,
+   "not": "\"Kira gelirleri\" (6A26)"
+  },
+  "kaynakIdx": 1650711,
+  "kalicilik": "Bu dönem",
+  "durum": "onaylandi",
+  "onaylayan": "İlk tarama (dipnotta açık kira kalemi)",
+  "tarih": "2026-11-11",
+  "sonucuDegistirir": false,
+  "notlar": []
+ },
+ "RYGYO": {
+  "id": "kira-RYGYO-2026Q3",
+  "k": "RYGYO",
+  "konu": "Kira geliri tespiti",
+  "donem": "9A26",
+  "oneri": {
+   "tip": "tutar",
+   "tutar": 3125308334,
+   "not": "9A26 dipnotunda \"Yurtiçi satışlar\" (depo/lojistik kiralama GYO'su). \"Diğer satışlar\" düşülerek kalan kira kabul edildi.",
+   "cikarim": true
+  },
+  "kaynakIdx": 1689011,
+  "kalicilik": "Bu dönem",
+  "durum": "bekliyor",
+  "onaylayan": null,
+  "tarih": null,
+  "sonucuDegistirir": false,
+  "notlar": []
+ },
+ "SVGYO": {
+  "id": "kira-SVGYO-2026Q3",
+  "k": "SVGYO",
+  "konu": "Kira geliri tespiti",
+  "donem": "9A26",
+  "oneri": {
+   "tip": "tamami",
+   "not": "Hasılatın tamamı kira geliri"
+  },
+  "kaynakIdx": 1689091,
+  "kalicilik": "Kalıcı (sonraki dönemlerde de uygulanır)",
+  "durum": "onaylandi",
+  "onaylayan": "İlk tarama (dipnotta açık kira kalemi)",
+  "tarih": "2026-11-11",
+  "sonucuDegistirir": false,
+  "notlar": []
+ },
+ "SRVGY": {
+  "id": "kira-SRVGY-2026Q3",
+  "k": "SRVGY",
+  "konu": "Kira geliri tespiti",
+  "donem": "9A26",
+  "oneri": {
+   "tip": "tutar",
+   "tutar": 1296634225,
+   "not": "9A26 dipnotu sadece ülke kırılımı veriyor. FY25 kira geliri (1.390,6 mn TL) enflasyonla güncellenip 9/12 oranında dönemlendi.",
+   "cikarim": true
+  },
+  "kaynakIdx": 1693294,
+  "kalicilik": "Bu dönem",
+  "durum": "bekliyor",
+  "onaylayan": null,
+  "tarih": null,
+  "sonucuDegistirir": false,
+  "notlar": []
+ },
+ "SNGYO": {
+  "id": "kira-SNGYO-2026Q3",
+  "k": "SNGYO",
+  "konu": "Kira geliri tespiti",
+  "donem": "9A26",
+  "oneri": {
+   "tip": "tutar",
+   "tutar": 169356623,
+   "not": "9A26 dipnotunda kırılım yok. FY25 kira geliri (181,6 mn TL) enflasyonla güncellenip 9/12 oranında dönemlendi.",
+   "cikarim": true
+  },
+  "kaynakIdx": 1694585,
+  "kalicilik": "Bu dönem",
+  "durum": "bekliyor",
+  "onaylayan": null,
+  "tarih": null,
+  "sonucuDegistirir": false,
+  "notlar": []
+ },
+ "SURGY": {
+  "id": "kira-SURGY-2026Q3",
+  "k": "SURGY",
+  "konu": "Kira geliri tespiti",
+  "donem": "9A26",
+  "oneri": {
+   "tip": "sifir",
+   "not": "Hasılat 3 adet konut satışı"
+  },
+  "kaynakIdx": 1690178,
+  "kalicilik": "Kalıcı (sonraki dönemlerde de uygulanır)",
+  "durum": "onaylandi",
+  "onaylayan": "İlk tarama (dipnotta açık kira kalemi)",
+  "tarih": "2026-11-11",
+  "sonucuDegistirir": false,
+  "notlar": []
+ },
+ "SEGYO": {
+  "id": "kira-SEGYO-2026Q3",
+  "k": "SEGYO",
+  "konu": "Kira geliri tespiti",
+  "donem": "9A26",
+  "oneri": {
+   "tip": "tutar",
+   "tutar": 172783918,
+   "not": "\"Gayrimenkul kira gelirleri\""
+  },
+  "kaynakIdx": 1692570,
+  "kalicilik": "Bu dönem",
+  "durum": "onaylandi",
+  "onaylayan": "İlk tarama (dipnotta açık kira kalemi)",
+  "tarih": "2026-11-11",
+  "sonucuDegistirir": false,
+  "notlar": []
+ },
+ "TRGYO": {
+  "id": "kira-TRGYO-2026Q3",
+  "k": "TRGYO",
+  "konu": "Kira geliri tespiti",
+  "donem": "9A26",
+  "oneri": {
+   "tip": "tutar",
+   "tutar": 9214274000,
+   "not": "\"Kira gelirleri\" (dipnot bin TL)"
+  },
+  "kaynakIdx": 1695835,
+  "kalicilik": "Bu dönem",
+  "durum": "onaylandi",
+  "onaylayan": "İlk tarama (dipnotta açık kira kalemi)",
+  "tarih": "2026-11-11",
+  "sonucuDegistirir": false,
+  "notlar": []
+ },
+ "TDGYO": {
+  "id": "kira-TDGYO-2026Q3",
+  "k": "TDGYO",
+  "konu": "Kira geliri tespiti",
+  "donem": "9A26",
+  "oneri": {
+   "tip": "sifir",
+   "not": "\"Proje satış gelirleri\"; kira yok"
+  },
+  "kaynakIdx": 1690155,
+  "kalicilik": "Kalıcı (sonraki dönemlerde de uygulanır)",
+  "durum": "onaylandi",
+  "onaylayan": "İlk tarama (dipnotta açık kira kalemi)",
+  "tarih": "2026-11-11",
+  "sonucuDegistirir": false,
+  "notlar": []
+ },
+ "TSGYO": {
+  "id": "kira-TSGYO-2026Q3",
+  "k": "TSGYO",
+  "konu": "Kira geliri tespiti",
+  "donem": "9A26",
+  "oneri": {
+   "tip": "tutar",
+   "tutar": 201551326,
+   "not": "Pendorya + Fındıklı 1-2 + Divan Adana kira gelirleri"
+  },
+  "kaynakIdx": 1688450,
+  "kalicilik": "Bu dönem",
+  "durum": "onaylandi",
+  "onaylayan": "İlk tarama (dipnotta açık kira kalemi)",
+  "tarih": "2026-11-11",
+  "sonucuDegistirir": false,
+  "notlar": []
+ },
+ "VKGYO": {
+  "id": "kira-VKGYO-2026Q3",
+  "k": "VKGYO",
+  "konu": "Kira geliri tespiti",
+  "donem": "9A26",
+  "oneri": {
+   "tip": "tutar",
+   "tutar": 666231256,
+   "not": "\"Kira gelirleri\" (toplam hasılatta 513,8 mn TL mevduat faizi de var). Toplam Gelir = Hasılat alındı."
+  },
+  "kaynakIdx": 1690169,
+  "kalicilik": "Bu dönem",
+  "durum": "onaylandi",
+  "onaylayan": "İlk tarama (dipnotta açık kira kalemi)",
+  "tarih": "2026-11-11",
+  "sonucuDegistirir": false,
+  "notlar": []
+ },
+ "VRGYO": {
+  "id": "kira-VRGYO-2026Q3",
+  "k": "VRGYO",
+  "konu": "Kira geliri tespiti",
+  "donem": "9A26",
+  "oneri": {
+   "tip": "sifir",
+   "not": "9A26 dipnotunda sadece \"Hasılat\"; FY25 dipnotunda tamamı \"Gayrimenkul Satış Gelirleri\". Kira yok kabul edildi.",
+   "cikarim": true
+  },
+  "kaynakIdx": 1689942,
+  "kalicilik": "Kalıcı (sonraki dönemlerde de uygulanır)",
+  "durum": "bekliyor",
+  "onaylayan": null,
+  "tarih": null,
+  "sonucuDegistirir": false,
+  "notlar": []
+ },
+ "YGGYO": {
+  "id": "kira-YGGYO-2026Q3",
+  "k": "YGGYO",
+  "konu": "Kira geliri tespiti",
+  "donem": "9A26",
+  "oneri": {
+   "tip": "tutar",
+   "tutar": 2699564404,
+   "not": "Bölüm raporlaması: Ankamall AVM + CP Ankara Otel (kiraya verilmiş) hasılatı. AVM hasılatında ortak alan/hizmet gelirleri de olabilir. Enerji bölümü hariç tutuldu.",
+   "cikarim": true
+  },
+  "kaynakIdx": 1693463,
+  "kalicilik": "Bu dönem",
+  "durum": "bekliyor",
+  "onaylayan": null,
+  "tarih": null,
+  "sonucuDegistirir": false,
+  "notlar": []
+ },
+ "ZERGY": {
+  "id": "kira-ZERGY-2026Q3",
+  "k": "ZERGY",
+  "konu": "Kira geliri tespiti",
+  "donem": "9A26",
+  "oneri": {
+   "tip": "sifir",
+   "not": "\"Yurtiçi satışlar\" (satılan mamul maliyetiyle); FY25 dipnotunda \"gayrimenkul satış gelirleri\". Kira yok.",
+   "cikarim": true
+  },
+  "kaynakIdx": 1689172,
+  "kalicilik": "Kalıcı (sonraki dönemlerde de uygulanır)",
+  "durum": "bekliyor",
+  "onaylayan": null,
+  "tarih": null,
+  "sonucuDegistirir": false,
+  "notlar": []
+ },
+ "ZGYO": {
+  "id": "kira-ZGYO-2026Q3",
+  "k": "ZGYO",
+  "konu": "Kira geliri tespiti",
+  "donem": "9A26",
+  "oneri": {
+   "tip": "tutar",
+   "tutar": 10847854,
+   "not": "Bilfen'den elde edilen kira gelirleri"
+  },
+  "kaynakIdx": 1690226,
+  "kalicilik": "Bu dönem",
+  "durum": "onaylandi",
+  "onaylayan": "İlk tarama (dipnotta açık kira kalemi)",
+  "tarih": "2026-11-11",
+  "sonucuDegistirir": false,
+  "notlar": []
+ },
+ "ZRGYO": {
+  "id": "kira-ZRGYO-2026Q3",
+  "k": "ZRGYO",
+  "konu": "Kira geliri tespiti",
+  "donem": "9A26",
+  "oneri": {
+   "tip": "tutar",
+   "tutar": 2319623159,
+   "not": "Yurt içi + yurt dışı kira gelirleri"
+  },
+  "kaynakIdx": 1694045,
+  "kalicilik": "Bu dönem",
+  "durum": "onaylandi",
+  "onaylayan": "İlk tarama (dipnotta açık kira kalemi)",
+  "tarih": "2026-11-11",
+  "sonucuDegistirir": false,
+  "notlar": []
+ }
+}
