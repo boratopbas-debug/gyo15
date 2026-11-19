@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>OSG15 Endeks Hesaplama</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="endeks.css">
+</head>
+<body>
+<header class="top">
+  <div class="brand"><span class="mark">OSG15</span><span>Osmanlı Portföy GYO 15 Endeksi</span></div>
+  <nav>
+    <a class="navlink" href="index.html">Güncel seçim (agent)</a>
+    <a class="navlink" href="endeks.html" aria-current="page">Endeks hesaplama</a>
+  </nav>
+  <div class="agentbox"><span id="olusturma" class="muted"></span></div>
+</header>
+<main id="main"><p class="muted" style="padding:40px">Yükleniyor…</p></main>
+<aside id="drawer" hidden>
+  <div class="dhead"><h3 id="dTitle"></h3><button class="btn" id="dClose" aria-label="Kapat">✕</button></div>
+  <div id="dBody"></div>
+</aside>
+<div id="tip" class="tip" hidden></div>
+<script type="module" src="endeks.js"></script>
+</body>
+</html>

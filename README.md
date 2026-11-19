@@ -23,6 +23,31 @@ Osmanlı Portföy GYO 15 Endeksi için seçim taraması yapan, kaynağını gös
 | `netlify/edge-functions/auth.js` | Parola koruması |
 | `scripts/` | Yerel araçlar: KAP önbelleğini doldurma, statik paket üretme, yerel çalıştırma |
 
+## Tarihsel endeks hesabı (`endeks.html`)
+
+Son 2 yılın 9 değerlemesi (Ara 2024 – Eyl 2026 + Aralık 2026 önizlemesi) kural setiyle yeniden yapılır ve endeks günlük olarak hesaplanır (TL ve USD getiri endeksi, baz 31.12.2024 = 1.000).
+Sayfada grafik, tarihle arama (o gün geçerli dönem, üyeler, ağırlıklar, giren/çıkan), her değerlemenin seçim tablosu ve flag listesi var.
+
+Veri hattı Python'dur (`scripts/tarihsel/`), önbellek `data/cache/tarihsel/` altında tutulur (git'e girmez):
+
+```bash
+python3 scripts/tarihsel/fetch.py search   # KAP FR + ODA bildirim aramaları (2024'ten bugüne)
+python3 scripts/tarihsel/fetch.py prices   # İş Yatırım günlük fiyat, PD, halka açık PD, USD, BIST 100
+cat data/cache/tarihsel/idx.txt | xargs -P 6 -n 10 python3 scripts/tarihsel/kap_parse.py   # rapor sayfaları → XBRL
+python3 scripts/tarihsel/temettu.py        # KAP kâr payı kararları + İş Yatırım ödemeleri
+python3 scripts/tarihsel/pdf.py            # seçilen raporların dipnot PDF'leri ve aynı dönem faaliyet raporları → metin
+python3 scripts/tarihsel/build.py          # seçimler + endeks → public/data/tarihsel.json
+```
+
+| Dosya | İş |
+|---|---|
+| `ortak.py` | Rapor kataloğu, değerleme günü itibarıyla rapor seçimi, XBRL okuma |
+| `kira.py` | Kira gelirini dipnottan iki yöntemle okur (HASILAT başlıklı not, XBRL hasılat toplamının geçtiği tablo); faaliyet raporunda teyit arar |
+| `temettu.py` | Kâr payı kararları (genel kurul tarihi, 1 TL nominal başına brüt, taksitler, avans) |
+| `build.py` | LTM FAVÖK (TÜFE katsayıları raporlardan türetilir), seçim, puanlama, ağırlık (%3–%13), getiri endeksi, olaylar ve flag'ler |
+
+Flag türleri: **Doğrulanamadı** (veri iki kaynakta teyit edilemedi), **Çelişki** (iki kaynak farklı), **Tahmini**, **Çıkarım** (karar hafızasından), **Teyitli**. Endeks/yedek sınırındaki teyitsiz veriler "kritik" olarak grafikte de gösterilir.
+
 ## Netlify kurulumu
 
 1. Bu repoyu Netlify'da **Add new site → Import an existing project** ile bağla. Build command boş, publish `public` (netlify.toml'da tanımlı).
