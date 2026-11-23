@@ -13,7 +13,7 @@ export const KURAL = {
 
 export const ORAN_AD = {
   pddd: 'PD/DD', fav: 'FAVÖK/FD', dy: 'Temettü verimi', cr: 'Cari oran', lev: 'Yükümlülük/Varlık',
-  kg: 'Kira/Hasılat', kv: 'Kira/Varlık (yıllık)',
+  kg: 'Kira/Hasılat (12 ay)', kv: 'Kira/Varlık (12 ay)',
 };
 
 function xbrlDeger(b, key, kolon, carpan) {
@@ -82,24 +82,83 @@ export function sirketHesapla(s, bild, fyBild, hafiza, meta) {
   rent.kaynak = rent.kaynak || kiraKaynak;
   g.KIRA = rent;
 
+  kira12Hesapla(g, s, bild, fyBild, c, cf, ay, kira);
+
   const o = {
     cr: T(g.CL.deger ? g.CA.deger / g.CL.deger : null, 'Dönen varlıklar / KV yükümlülükler', { CA: g.CA, CL: g.CL }),
     lev: T(g.TL.deger / g.TA.deger, 'Toplam yükümlülükler / Toplam varlıklar', { TL: g.TL, TA: g.TA }),
     fav: T(g.FAV_LTM.deger / g.FD.deger, 'FAVÖK (son 12 ay) / Firma değeri', { FAV_LTM: g.FAV_LTM, FD: g.FD }),
     pddd: T(g.PD.deger / g.EQ.deger, 'Piyasa değeri / Defter değeri (ana ortaklık özkaynakları)', { PD: g.PD, EQ: g.EQ }),
     dy: T(g.DIV.deger / g.PD.deger * 100, 'Brüt nakit temettü / Piyasa değeri × 100', { DIV: g.DIV, PD: g.PD }),
-    kg: T(g.REV.deger ? g.KIRA.deger / g.REV.deger : 0, 'Kira geliri / Hasılat', { KIRA: g.KIRA, REV: g.REV }),
-    kv: T(g.KIRA.deger * (12 / ay) / g.TA.deger, `Kira geliri × 12/${ay} / Toplam varlıklar`, { KIRA: g.KIRA, TA: g.TA }),
+    kg: T(g.REV_LTM.deger ? g.KIRA_LTM.deger / g.REV_LTM.deger : 0, 'Kira geliri (son 12 ay) / Hasılat (son 12 ay)', { KIRA_LTM: g.KIRA_LTM, REV_LTM: g.REV_LTM }),
+    kv: T(g.TA.deger ? g.KIRA_LTM.deger / g.TA.deger : 0, 'Kira geliri (son 12 ay) / Toplam varlıklar', { KIRA_LTM: g.KIRA_LTM, TA: g.TA }),
   };
   const elenme = [];
+  const kiraBayrak = [];
+  if (g.KIRA_LTM.yilliklandi) kiraBayrak.push(['kira', `Son 12 ay kira yıllıklandırıldı: ${g.KIRA_LTM.not}`]);
+  else if (g.KIRA_LTM.tahmini) kiraBayrak.push(['kira', 'Son 12 ay kira: yıllık ya da önceki yıl tutarı tahmini (dönem kira/hasılat oranından)']);
+  if (g.KIRA_LTM.deger < 0) kiraBayrak.push(['kira', 'Son 12 ay kira negatif çıktı; yıllık/önceki yıl tutarları kontrol edilmeli']);
   if (o.lev.deger > KURAL.levSinir) elenme.push(`Yükümlülük/Varlık %${(o.lev.deger * 100).toFixed(1)} > %85`);
   if (o.kg.deger < KURAL.kiraHasilatMin && o.kv.deger < KURAL.kiraVarlikMin) elenme.push(`Kira/Hasılat %${(o.kg.deger * 100).toFixed(1)} < %15 ve Kira/Varlık %${(o.kv.deger * 100).toFixed(2)} < %2,5`);
 
   return {
     k: s.k, u: s.u, pz: s.pz, ay, nitelik: bild.nitelik, birim: bild.paraBirimi, donem: bild.tablolar && Object.values(bild.tablolar)[0]?.cari,
-    kap: bild.url, fy: fyBild ? fyBild.url : null, ekler: bild.ekler, girdiler: g, oranlar: o, elenme, bayraklar: s.fl || [],
+    kap: bild.url, fy: fyBild ? fyBild.url : null, ekler: bild.ekler, girdiler: g, oranlar: o, elenme, bayraklar: [...(s.fl || []), ...kiraBayrak],
     kiraKarar: karar, kiraCikarim: !!kira.cikarim,
   };
+}
+
+/** Son 12 ay kira ve hasılat — FAVÖK ile aynı köprü: dönem + son yıllık × TÜFE katsayısı − önceki yıl aynı dönem.
+ *  Yıllık ve önceki yıl kira tutarları veri tablosundan (scripts/tarihsel/veri.py → data/veri.json) gelir: s.kira12.
+ *  Bu satır yalnızca aynı rapora aitse kullanılır; agent daha yeni bir rapor çektiyse dönem × 12/ay ile yıllıklandırılır. */
+function kira12Hesapla(g, s, bild, fyBild, c, cf, ay, kira) {
+  const v = s.kira12 || null;
+  const vk = v ? v.kira : null;
+  const veriKay = (aciklama, idx, tespit) => ({ tur: 'veri', aciklama, tespit, url: idx ? `https://www.kap.org.tr/tr/Bildirim/${idx}` : null, bildirim: idx || null });
+  const yillikla = neden => {
+    g.REV_LTM = T(g.REV.deger * 12 / ay, `Hasılat (${ay} ay) × 12/${ay}`, { REV: g.REV }, neden);
+    g.KIRA_LTM = T(g.KIRA.deger * 12 / ay, `Kira geliri (${ay} ay) × 12/${ay}`, { KIRA: g.KIRA }, neden);
+    g.KIRA_LTM.yilliklandi = true;
+  };
+
+  if (ay === 12) {
+    g.REV_LTM = T(g.REV.deger, 'Yıllık rapor: hasılat (12 ay) doğrudan', { REV: g.REV });
+    g.KIRA_LTM = T(g.KIRA.deger, 'Yıllık rapor: kira geliri (12 ay) doğrudan', { KIRA: g.KIRA });
+    return;
+  }
+
+  // TÜFE katsayısı: FAVÖK köprüsündekiyle aynı; FAVÖK harici/yıllıklandırılmış geldiyse veri tablosundaki rapor katsayısı
+  let KF = g.KF;
+  if (!KF && v && v.kf) KF = { deger: v.kf, kaynak: { tur: 'parametre', aciklama: `TÜFE katsayısı ${v.yillik ? v.yillik.donemSonu : 'yıllık rapor'} → ${v.donemSonu} (raporlardaki yeniden düzenlenmiş bilançolardan, veri tablosu)` } };
+
+  // Hasılat: yıllık XBRL'den; yıllık rapor önbellekte yoksa veri tablosundan
+  let REV_FY = null;
+  if (fyBild) REV_FY = xbrlDeger(fyBild, 'REV', 'cari', cf);
+  else if (v && v.hasilat && v.hasilat.yillik != null && v.yillik) REV_FY = { deger: v.hasilat.yillik, kaynak: veriKay('Yıllık rapor hasılatı (veri tablosu)', v.yillik.idx, 'Doğrudan') };
+  const REV_ONCEKI = xbrlDeger(bild, 'REV', 'onceki', c);
+
+  if (!KF || !REV_FY) return yillikla('Yıllık rapor ya da TÜFE katsayısı yok; dönem yıllıklandırıldı');
+  if (!['tamami', 'sifir'].includes(kira.tip) && (!vk || vk.yillik == null || vk.onceki == null))
+    return yillikla(v ? 'Veri tablosunda yıllık/önceki yıl kira tutarı yok; dönem yıllıklandırıldı' : 'Bu rapor için veri tablosu satırı yok (agent daha yeni rapor çekmiş olabilir); dönem yıllıklandırıldı');
+  if (vk && vk.ltmFormul === 'yilliklandir') return yillikla('Elle kontrol: 12 aylık kira yıllıklandırıldı (veri tablosu)');
+
+  g.REV_FY = REV_FY; g.REV_ONCEKI = REV_ONCEKI;
+  g.REV_LTM = T(g.REV.deger + REV_FY.deger * KF.deger - REV_ONCEKI.deger, 'Hasılat dönem + Hasılat FY × TÜFE katsayısı − Hasılat önceki yıl aynı dönem',
+    { REV: g.REV, REV_FY, KF, REV_ONCEKI });
+
+  if (kira.tip === 'tamami') {
+    g.KIRA_FY = T(REV_FY.deger, 'Karar hafızası kuralı (hasılatın tamamı kira) yıllık hasılata uygulandı', { REV_FY });
+    g.KIRA_ONCEKI = T(REV_ONCEKI.deger, 'Karar hafızası kuralı önceki yıl hasılatına uygulandı', { REV_ONCEKI });
+  } else if (kira.tip === 'sifir') {
+    g.KIRA_FY = T(0, 'Karar hafızası kuralı: kira yok', {});
+    g.KIRA_ONCEKI = T(0, 'Karar hafızası kuralı: kira yok', {});
+  } else {
+    g.KIRA_FY = { deger: vk.yillik, kaynak: veriKay(vk.yillikKaynak || 'Yıllık raporun hasılat dipnotu', v.yillik && v.yillik.idx, vk.yillikTespit) };
+    g.KIRA_ONCEKI = { deger: vk.onceki, kaynak: veriKay(vk.oncekiKaynak || 'Son raporun hasılat dipnotu, önceki yıl sütunu', v.rapor && v.rapor.idx, vk.oncekiTespit) };
+  }
+  g.KIRA_LTM = T(g.KIRA.deger + g.KIRA_FY.deger * KF.deger - g.KIRA_ONCEKI.deger, 'Kira dönem + Kira FY × TÜFE katsayısı − Kira önceki yıl aynı dönem',
+    { KIRA: g.KIRA, KIRA_FY: g.KIRA_FY, KF, KIRA_ONCEKI: g.KIRA_ONCEKI });
+  g.KIRA_LTM.tahmini = [g.KIRA_FY, g.KIRA_ONCEKI].some(x => x.kaynak && x.kaynak.tespit === 'Tahmini');
 }
 
 /** Havuzda kalanları puanlar, sıralar, endeks/yedek seçer. */

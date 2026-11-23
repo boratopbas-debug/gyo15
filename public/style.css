@@ -76,6 +76,7 @@ td.src:hover{background:var(--accent-soft);outline:1px dashed var(--accent);outl
 .kay{font-size:.78rem;padding:6px 8px;border-radius:4px;margin:4px 0;background:#f2f6f5;border:1px solid var(--line)}
 .kay code{font-family:var(--f-mono);font-size:.74rem;background:var(--sunk);padding:0 4px;border-radius:3px}
 .kay.karar{background:var(--warn-bg);border-color:#ecd9ad}
+.kay.veri{background:var(--sunk)}
 .bekl{color:var(--warn);font-weight:600}
 table.mini th,table.mini td{font-size:.78rem;padding:4px 6px}
 
