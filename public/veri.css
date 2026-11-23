@@ -1,0 +1,19 @@
+.vbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+.vbar .sol{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.indir{display:flex;gap:8px}
+.indir a.btn{text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+.tes{display:inline-block;font-size:.7rem;font-weight:600;padding:1px 6px;border-radius:3px;margin-left:4px;vertical-align:1px}
+.tes-Doğrudan{display:none}
+.tes-Yorum{background:var(--warn-bg);color:var(--warn)}
+.tes-Tahmini{background:var(--out-bg);color:var(--out)}
+td.flagcell{background:#fdf6e6}
+.vt th{cursor:pointer}
+.vt td.l .nm{max-width:210px;overflow:hidden;text-overflow:ellipsis}
+.vt tbody tr{cursor:pointer}
+.vt tbody tr:hover td{background:var(--accent-soft)}
+.kopru td,.kopru th{text-align:right}
+.kopru td.l,.kopru th.l{text-align:left}
+.kopru tr.ayrac td{font-weight:600;border-top:2px solid var(--line)}
+.birim{font-size:.78rem;color:var(--muted)}
+.vt th,.vt td{padding:7px 7px}
+.vt td .fl{margin-right:3px}

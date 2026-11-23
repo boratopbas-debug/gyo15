@@ -146,6 +146,88 @@ def eslesir(a, b, tol=0.02):
     return False
 
 
+def _konumlu(satir):
+    """Satırdaki sayılar ve bitiş sütunları (pdftotext -layout sağa yaslı sütunlar için)."""
+    out = []
+    for m in SAYI.finditer(satir):
+        t = m.group(0)
+        if re.fullmatch(r'\(?\d{4}\)?', t) and 1990 < int(t.strip('()')) < 2100:
+            continue
+        try:
+            out.append((sayi(t), m.end()))
+        except ValueError:
+            pass
+    return out
+
+
+def iki_sutun(metin, hasilat_c, hasilat_o):
+    """Hasılat dipnotunda cari ve önceki dönem sütunlarını XBRL hasılat toplamlarıyla bulur, kira satırlarını bu iki sütundan okur.
+    hasilat_c / hasilat_o rapor biriminde. Sütun eşlemesi karakter konumuyla yapılır; boş hücre ('-') sütun kaydırmaz.
+    Dönüş: {'cari', 'onceki', 'satirlar', 'durum': bulundu|belirsiz|yok, 'not'}"""
+    if not metin or not hasilat_c:
+        return {'cari': None, 'onceki': None, 'satirlar': [], 'durum': 'yok', 'not': 'Metin ya da hasılat yok'}
+    L = metin.split('\n')
+
+    def esit(v, h):
+        return h is not None and abs(abs(v) - abs(h)) <= max(1.0, 0.0005 * abs(h))
+
+    adaylar = []
+    for i, l in enumerate(L):
+        if i < 120:
+            continue
+        nums = _konumlu(l)
+        ic = next((p for v, p in nums if esit(v, hasilat_c)), None)
+        if ic is None:
+            continue
+        io = next((p for v, p in nums if hasilat_o and esit(v, hasilat_o) and p != ic), None)
+        kira = []
+        for j in range(max(0, i - 40), min(len(L), i + 4)):
+            s = L[j]
+            if j == i or not KIRA.search(s) or HARIC.search(s) or not kisa_etiket(s):
+                continue
+            n = _konumlu(s)
+            if not n:
+                continue
+            vc = next((v for v, p in n if abs(p - ic) <= 4), None)
+            vo = next((v for v, p in n if io is not None and abs(p - io) <= 4), None)
+            if vc is None and vo is None:
+                # sütun konumu tutmadı (farklı sayfa düzeni) → sıra ile oku
+                vc = n[0][0]
+                vo = n[1][0] if len(n) > 1 and io is not None else None
+                konum = False
+            else:
+                konum = True
+            kira.append({'satir': j, 'metin': re.sub(r'\s{2,}', ' | ', s.strip())[:160], 'cari': abs(vc) if vc else 0.0,
+                         'onceki': abs(vo) if vo else (0.0 if io is not None else None), 'konum': konum, 'toplam': bool(re.search(r'toplam', s, re.I))})
+        if kira:
+            adaylar.append((i, io is not None, kira))
+    if not adaylar:
+        return {'cari': None, 'onceki': None, 'satirlar': [], 'durum': 'yok', 'not': 'Hasılat toplamının geçtiği tabloda kira satırı yok'}
+    # önceki dönem sütunu da bulunan ilk tablo tercih edilir
+    adaylar.sort(key=lambda a: (not a[1], a[0]))
+    i, onceki_var, kira = adaylar[0]
+    tek = {}
+    for a in kira:
+        tek.setdefault(a['satir'], a)
+    kira = sorted(tek.values(), key=lambda a: a['satir'])
+    top = [a for a in kira if a['toplam']]
+    grup = top[:1] if top else [a for a in kira if a['cari'] or a['onceki']]
+    if not grup:
+        return {'cari': 0.0, 'onceki': 0.0 if onceki_var else None, 'satirlar': kira, 'durum': 'belirsiz', 'not': 'Kira satırı var ama tutarı boş'}
+    cari = sum(a['cari'] or 0 for a in grup)
+    onceki = sum(a['onceki'] or 0 for a in grup) if onceki_var else None
+    if cari > hasilat_c * 1.001 or (onceki is not None and hasilat_o and onceki > hasilat_o * 1.001):
+        return {'cari': None, 'onceki': None, 'satirlar': grup, 'durum': 'yok', 'not': 'Okunan kira hasılattan büyük, atıldı'}
+    durum = 'bulundu' if (len(grup) == 1 and all(a['konum'] for a in grup)) else 'belirsiz'
+    nt = ('Toplam kira satırı' if top else ('Tek kira satırı' if len(grup) == 1 else f'{len(grup)} kira satırı toplandı; çift sayım kontrol edilmeli'))
+    if not onceki_var:
+        nt += '; önceki dönem sütunu hasılat toplamıyla eşlenemedi'
+    if not all(a['konum'] for a in grup):
+        nt += '; sütun konumu tutmadı, sırayla okundu'
+        durum = 'belirsiz'
+    return {'cari': cari, 'onceki': onceki, 'satirlar': grup, 'durum': durum, 'not': nt}
+
+
 def dipnot(metin, hasilat=None):
     """İki yöntem: (A) HASILAT başlıklı dipnot bloğu, (B) XBRL hasılat toplamının geçtiği tablo. Uyuşursa 'bulundu'."""
     a = _baslikli(metin)
