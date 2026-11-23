@@ -33,6 +33,7 @@ Veri hattı Python'dur (`scripts/tarihsel/`), önbellek `data/cache/tarihsel/` a
 ```bash
 python3 scripts/tarihsel/fetch.py search   # KAP FR + ODA bildirim aramaları (2024'ten bugüne)
 python3 scripts/tarihsel/fetch.py prices   # İş Yatırım günlük fiyat, PD, halka açık PD, USD, BIST 100
+python3 scripts/tarihsel/katalog.py        # aramalardan GYO finansal rapor / faaliyet raporu kataloğu + idx.txt
 cat data/cache/tarihsel/idx.txt | xargs -P 6 -n 10 python3 scripts/tarihsel/kap_parse.py   # rapor sayfaları → XBRL
 python3 scripts/tarihsel/temettu.py        # KAP kâr payı kararları + İş Yatırım ödemeleri
 python3 scripts/tarihsel/pdf.py            # seçilen raporların dipnot PDF'leri ve aynı dönem faaliyet raporları → metin
@@ -45,6 +46,20 @@ python3 scripts/tarihsel/build.py          # seçimler + endeks → public/data/
 | `kira.py` | Kira gelirini dipnottan iki yöntemle okur (HASILAT başlıklı not, XBRL hasılat toplamının geçtiği tablo); faaliyet raporunda teyit arar |
 | `temettu.py` | Kâr payı kararları (genel kurul tarihi, 1 TL nominal başına brüt, taksitler, avans) |
 | `build.py` | LTM FAVÖK (TÜFE katsayıları raporlardan türetilir), seçim, puanlama, ağırlık (%3–%13), getiri endeksi, olaylar ve flag'ler |
+
+## Veri tablosu (`veri.html`)
+
+54 şirketin en son raporundan **toplam varlıklar, hasılat, kira geliri, FAVÖK**; hasılat, kira ve FAVÖK hem rapor dönemi hem **son 12 ay** olarak.
+Sayfada Excel (`public/data/OSG15_GYO_Veri.xlsx`: Veri, 12 ay köprüsü (formüllü), Flagler, Açıklama) ve CSV (`;` ayraç, `,` ondalık) indirme düğmeleri var.
+
+```bash
+python3 scripts/tarihsel/veri.py indir    # gereken dipnot ve faaliyet raporu PDF'lerini çeker, veri.json + xlsx + csv üretir
+```
+
+- 12 ay = dönem + son yıllık rapor × TÜFE katsayısı − önceki yılın aynı dönemi (son rapordaki karşılaştırmalı sütun).
+- Kira: hasılat dipnotundan iki sütunlu otomatik okuma (`kira.iki_sutun`), faaliyet raporunda teyit; dipnotta açık satır yoksa karar hafızası.
+- `data/kira-elle.json`: otomatik okumanın yetmediği yerlerde (çok satırlı/bölümlü tablolar, taranmış PDF → OCR, faaliyet raporu tabloları) elle kontrol edilmiş tutarlar ve kaynak satırları.
+- Kira tespiti: **Doğrudan** (dipnotta açık kira satırı), **Yorum** (kalemden çıkarım), **Tahmini** (oranla ya da yıllıklandırma). Doğrudan olmayanlar "Kira flag".
 
 Flag türleri: **Doğrulanamadı** (veri iki kaynakta teyit edilemedi), **Çelişki** (iki kaynak farklı), **Tahmini**, **Çıkarım** (karar hafızasından), **Teyitli**. Endeks/yedek sınırındaki teyitsiz veriler "kritik" olarak grafikte de gösterilir.
 
