@@ -1,7 +1,8 @@
-import { sirketHesapla, puanla, KURAL, ORAN_AD } from './lib/engine.mjs';
+import { sirketHesapla, puanla, KURAL, ORAN_AD, PENCERELER, oranAd } from './lib/engine.mjs';
 
 /* ============ Durum ============ */
-const S = { seed: null, kaynak: null, veri: {}, hafiza: {}, gunluk: [], guncel: {}, kaynakEk: {}, agent: {}, cevrimdisi: false, liste: [], gorunum: 'siralama', filtre: 'all', q: '', sk: 'sira', sd: 1 };
+const S = { seed: null, kaynak: null, veri: {}, hafiza: {}, gunluk: [], guncel: {}, kaynakEk: {}, agent: {}, cevrimdisi: false, liste: [], listeler: {}, pencere: 12, gorunum: 'siralama', filtre: 'all', q: '', sk: 'sira', sd: 1 };
+try { const p = Number(new URLSearchParams(location.search).get('pencere') || localStorage.getItem('osg15-pencere')); if (PENCERELER.includes(p)) S.pencere = p; } catch { }
 
 const ETIKET = {
   CA: 'Dönen varlıklar', CL: 'KV yükümlülükler', TA: 'Toplam varlıklar', TL: 'Toplam yükümlülükler', EQ: 'Defter değeri (ana ortaklık özkaynakları)',
@@ -10,10 +11,17 @@ const ETIKET = {
   GA: 'Genel yönetim giderleri', RD: 'Ar-Ge giderleri', DA: 'Amortisman düzeltmesi', FAV_DONEM: 'FAVÖK (cari dönem)', FAV_ONCEKI: 'FAVÖK (önceki yıl aynı dönem)',
   FAV_FY: 'FAVÖK (son yıllık rapor)', FAV_LTM: 'FAVÖK (son 12 ay)', KF: 'TÜFE katsayısı',
   REV_FY: 'Hasılat (son yıllık rapor)', REV_ONCEKI: 'Hasılat (önceki yıl aynı dönem)', REV_LTM: 'Hasılat (son 12 ay)',
-  KIRA_FY: 'Kira geliri (son yıllık rapor)', KIRA_ONCEKI: 'Kira geliri (önceki yıl aynı dönem)', KIRA_LTM: 'Kira geliri (son 12 ay)', ND: 'Net borç', PX: 'Kapanış fiyatı', PD: 'Piyasa değeri',
+  KIRA_FY: 'Kira geliri (son yıllık rapor)', KIRA_ONCEKI: 'Kira geliri (önceki yıl aynı dönem)', KIRA_LTM: 'Kira geliri (son 12 ay)', ND: 'Net borç',
+  REV_ARA: 'Hasılat (ara rapor)', FAV_ARA: 'FAVÖK (ara rapor)', KIRA_ARA: 'Kira geliri (ara rapor)', KF_W: 'TÜFE katsayısı (ara rapor → son rapor)', PX: 'Kapanış fiyatı', PD: 'Piyasa değeri',
   FD: 'Firma değeri', DIV: 'Brüt nakit temettü', KIRA: 'Kira geliri', ...Object.fromEntries(Object.entries(ORAN_AD)),
 };
-const PARA = new Set(['CA', 'CL', 'TA', 'TL', 'EQ', 'REV', 'CASH', 'CFI', 'STB', 'CPLTB', 'LTB', 'OFL_C', 'OFL_N', 'GP', 'MKT', 'GA', 'RD', 'DA', 'FAV_DONEM', 'FAV_ONCEKI', 'FAV_FY', 'FAV_LTM', 'ND', 'PD', 'FD', 'DIV', 'KIRA', 'REV_FY', 'REV_ONCEKI', 'REV_LTM', 'KIRA_FY', 'KIRA_ONCEKI', 'KIRA_LTM']);
+const PARA = new Set(['CA', 'CL', 'TA', 'TL', 'EQ', 'REV', 'CASH', 'CFI', 'STB', 'CPLTB', 'LTB', 'OFL_C', 'OFL_N', 'GP', 'MKT', 'GA', 'RD', 'DA', 'FAV_DONEM', 'FAV_ONCEKI', 'FAV_FY', 'FAV_LTM', 'ND', 'PD', 'FD', 'DIV', 'KIRA', 'REV_FY', 'REV_ONCEKI', 'REV_LTM', 'KIRA_FY', 'KIRA_ONCEKI', 'KIRA_LTM',
+  'REV_ARA', 'FAV_ARA', 'KIRA_ARA', 'REV_W', 'FAV_W', 'KIRA_W', 'FAV_WY', 'KIRA_WY']);
+const etiket = ad => {
+  const w = S.pencere;
+  const m = { REV_W: `Hasılat (son ${w} ay)`, FAV_W: `FAVÖK (son ${w} ay)`, KIRA_W: `Kira geliri (son ${w} ay)`, FAV_WY: `FAVÖK (son ${w} ay, yıllık)`, KIRA_WY: `Kira geliri (son ${w} ay, yıllık)` };
+  return m[ad] || (ORAN_AD[ad] ? oranAd(ad, w) : ETIKET[ad]);
+};
 
 const tr = (v, d = 2) => v == null || Number.isNaN(v) ? '–' : v.toLocaleString('tr-TR', { minimumFractionDigits: d, maximumFractionDigits: d });
 const pct = (v, d = 1) => v == null ? '–' : (v < 0 ? '−%' : '%') + tr(Math.abs(v) * 100, d);
@@ -24,7 +32,7 @@ const $ = id => document.getElementById(id);
 function bicim(anahtar, v) {
   if (anahtar.startsWith('ODEME_') || PARA.has(anahtar)) return mn(v);
   if (anahtar === 'PX') return tr(v) + ' TL';
-  if (anahtar === 'KF' || anahtar === 'cr' || anahtar === 'pddd') return tr(v, anahtar === 'KF' ? 4 : 2);
+  if (anahtar === 'KF' || anahtar === 'KF_W' || anahtar === 'cr' || anahtar === 'pddd') return tr(v, anahtar.startsWith('KF') ? 4 : 2);
   if (anahtar === 'dy') return '%' + tr(v, 2);
   if (['lev', 'fav', 'kg'].includes(anahtar)) return pct(v);
   if (anahtar === 'kv') return pct(v, 2);
@@ -46,10 +54,10 @@ function sirketGirdisi(s0) {
   return { ...s, kap: g.kap, fy: g.fy, ay: g.ay, kf: g.ay === 12 ? null : tufeOnayli(donem), kfAciklama: `TÜFE katsayısı ${donem} (karar hafızasından)`,
     ltm: g.ltm || (g.fy ? undefined : { yontem: 'yilliklandir', kaynak: 'Yıllık rapor bulunamadı — dönem FAVÖK yıllıklandırıldı' }), _yeniDonem: donem };
 }
-function hesapla(hafiza = S.hafiza) {
+function hesapla(hafiza = S.hafiza, pencere = 12) {
   const kaynak = id => id ? (S.kaynakEk[id] || S.kaynak[id]) : null;
   return puanla(S.seed.sirketler.map(s0 => {
-    const s = sirketGirdisi(s0);
+    const s = { ...sirketGirdisi(s0), pencere };
     const r = sirketHesapla(s, kaynak(s.kap), kaynak(s.fy), hafiza, S.seed);
     if (s._yeniDonem) r.bayraklar = [...r.bayraklar, ['piyasa', `Rapor ${s._yeniDonem} dönemine güncellendi; fiyat, piyasa değeri ve temettü hâlâ ${S.seed.fiyatTarihi} tarihli`]];
     if (r.kiraKarar && r.kiraKarar.durum === 'bekliyor') r.bayraklar = [...r.bayraklar, ['onay', 'Kira tespiti karar hafızasında onay bekliyor']];
@@ -73,7 +81,8 @@ async function durumYenile() {
     if (!Object.keys(S.hafiza).length) S.hafiza = await fetch('data/hafiza-baslangic.json').then(r => r.json());
     S.cevrimdisi = true;
   }
-  S.liste = hesapla();
+  S.listeler = Object.fromEntries(PENCERELER.map(w => [w, hesapla(S.hafiza, w)]));
+  S.liste = S.listeler[12];
   ciz();
 }
 
@@ -92,9 +101,10 @@ function ciz() {
 }
 
 const ORD = { Endeks: 0, Yedek: 1, Havuzda: 2, Elendi: 3 };
+const aktif = () => S.listeler[S.pencere] || S.liste;
 function satirlar() {
   const q = S.q;
-  return S.liste.filter(r => {
+  return aktif().filter(r => {
     if (S.filtre === 'sel' && !['Endeks', 'Yedek'].includes(r.durum)) return false;
     if (S.filtre === 'pool' && r.durum === 'Elendi') return false;
     if (S.filtre === 'out' && r.durum !== 'Elendi') return false;
@@ -108,8 +118,14 @@ function satirlar() {
   });
 }
 
+const PENCERE_ACIKLAMA = {
+  12: 'FAVÖK, hasılat ve kira son 12 ay: cari dönem + son yıllık rapor × TÜFE katsayısı − önceki yılın aynı dönemi.',
+  6: 'FAVÖK, hasılat ve kira son 6 ay (Nisan–Eylül 2026): 9 aylık rapor − 3 aylık ara rapor × TÜFE katsayısı. Kira/Varlık ve FAVÖK/FD için tutar × 2 ile yıllığa çevrilir; Kira/Hasılat çevrilmez.',
+  3: 'FAVÖK, hasılat ve kira son 3 ay (Temmuz–Eylül 2026): 9 aylık rapor − 6 aylık ara rapor × TÜFE katsayısı. Kira/Varlık ve FAVÖK/FD için tutar × 4 ile yıllığa çevrilir; Kira/Hasılat çevrilmez.',
+};
+const durumKisa = r => r ? (r.durum === 'Elendi' ? 'Elendi' : `${r.durum} ${r.sira}.`) : '–';
 function vSiralama() {
-  const L = S.liste, sec = L.filter(r => r.durum === 'Endeks').sort((a, b) => a.sira - b.sira), yed = L.filter(r => r.durum === 'Yedek');
+  const w = S.pencere, L = aktif(), sec = L.filter(r => r.durum === 'Endeks').sort((a, b) => a.sira - b.sira), yed = L.filter(r => r.durum === 'Yedek').sort((a, b) => a.sira - b.sira);
   const yeni = Object.keys(S.guncel).length;
   const kol = (k, l, alt) => `<th data-s="${k}">${l}${alt ? `<small>${alt}</small>` : ''}</th>`;
   const hucre = (r, o) => {
@@ -117,7 +133,15 @@ function vSiralama() {
     const kotu = (o === 'lev' && v > KURAL.levSinir) || ((o === 'kg' || o === 'kv') && r.oranlar.kg.deger < KURAL.kiraHasilatMin && r.oranlar.kv.deger < KURAL.kiraVarlikMin);
     return `<td class="src ${kotu ? 'fail' : ''}" data-k="${r.k}" data-o="${o}" title="Kaynağı göster">${bicim(o, v)}${p ? `<span class="pt">${tr(p.deger, 0)} p</span>` : ''}</td>`;
   };
+  const diger = PENCERELER.filter(x => x !== w);
+  const bul = (x, k) => (S.listeler[x] || []).find(r => r.k === k);
+  const fark = x => { const a = new Set(L.filter(r => r.durum === 'Endeks').map(r => r.k)), b = new Set((S.listeler[x] || []).filter(r => r.durum === 'Endeks').map(r => r.k)); return { gir: [...a].filter(k => !b.has(k)), cik: [...b].filter(k => !a.has(k)) }; };
+  const f12 = w === 12 ? null : fark(12);
   return `
+  <section class="pencere">
+    <div class="seg buyuk" id="pencere">${PENCERELER.map(x => `<button data-w="${x}" aria-pressed="${x === w}">${x} aylık</button>`).join('')}</div>
+    <p class="aciklama">${PENCERE_ACIKLAMA[w]}${f12 ? ` <b>12 aylığa göre endekse girenler:</b> ${f12.gir.join(', ') || 'yok'} · <b>çıkanlar:</b> ${f12.cik.join(', ') || 'yok'}.` : ''}</p>
+  </section>
   <section class="ozet">
     <div><span class="n">${L.length}</span><span class="l">GYO taranan</span></div>
     <div><span class="n">${L.filter(r => r.durum !== 'Elendi').length}</span><span class="l">Seçim havuzunda</span></div>
@@ -132,14 +156,15 @@ function vSiralama() {
       <div class="bar">
         <div class="seg" id="seg">${[['all', 'Tümü'], ['sel', 'Endeks + yedek'], ['pool', 'Havuz'], ['out', 'Elenenler'], ['flag', 'Bayraklı']].map(([f, l]) => `<button data-f="${f}" aria-pressed="${S.filtre === f}">${l}</button>`).join('')}</div>
         <input type="search" id="q" placeholder="Kod veya şirket ara" value="${esc(S.q)}">
+        <a class="btn" href="data/OSG15_Siralama.xlsx" download title="12, 6 ve 3 aylık sıralama ayrı sayfalarda (karar hafızasının ilk hâli)">Excel (12 · 6 · 3 ay)</a>
       </div>
     </div>
     <p class="ipucu">Herhangi bir sayıya tıkla: hangi KAP bildiriminden, hangi XBRL kaleminden ve hangi formülle geldiğini açar.</p>
     <div class="tablebox"><table><thead><tr>
       ${kol('sira', 'Sıra')}<th class="l" data-s="k">Kod</th><th class="l">Durum</th>${kol('toplam', 'Toplam puan')}
-      ${kol('pddd', 'PD/DD', '%50 · küçük iyi')}${kol('fav', 'FAVÖK/FD', '%20 · büyük iyi')}${kol('dy', 'Temettü verimi', '%20 · büyük iyi')}
-      ${kol('cr', 'Cari oran', '%5 · büyük iyi')}${kol('lev', 'Yük./Varlık', '%5 · küçük iyi · ≤%85')}${kol('kg', 'Kira/Hasılat', '≥%15 · 12 ay')}${kol('kv', 'Kira/Varlık', '≥%2,5 · 12 ay')}
-      <th>PD</th><th>Bayrak</th></tr></thead>
+      ${kol('pddd', 'PD/DD', '%50 · küçük iyi')}${kol('fav', 'FAVÖK/FD', `%20 · büyük iyi${w === 12 ? '' : ' · yıllık'}`)}${kol('dy', 'Temettü verimi', '%20 · büyük iyi')}
+      ${kol('cr', 'Cari oran', '%5 · büyük iyi')}${kol('lev', 'Yük./Varlık', '%5 · küçük iyi · ≤%85')}${kol('kg', 'Kira/Hasılat', `≥%15 · ${w} ay`)}${kol('kv', 'Kira/Varlık', `≥%2,5 · ${w} ay${w === 12 ? '' : ' · yıllık'}`)}
+      <th>PD</th><th>Bayrak</th><th class="l">Diğer pencereler</th></tr></thead>
       <tbody>${satirlar().map(r => `<tr>
         <td>${r.sira ?? '–'}</td>
         <td class="l code">${r.k}<span class="nm">${esc(r.u)}</span></td>
@@ -148,10 +173,12 @@ function vSiralama() {
         ${['pddd', 'fav', 'dy', 'cr', 'lev', 'kg', 'kv'].map(o => hucre(r, o)).join('')}
         <td class="src" data-k="${r.k}" data-o="_PD">${tr(r.girdiler.PD.deger / 1e6, 0)}</td>
         <td>${r.bayraklar.length ? `<span class="flagn src" data-k="${r.k}" data-o="_bayrak">${r.bayraklar.length}</span>` : ''}</td>
+        <td class="l diger">${diger.map(x => { const d = bul(x, r.k); return `<span class="dp d-${d ? d.durum : ''}">${x} ay: ${durumKisa(d)}</span>`; }).join('')}</td>
       </tr>`).join('')}</tbody></table></div>
   </section>`;
 }
 function bagSiralama() {
+  document.querySelectorAll('#pencere button').forEach(b => b.onclick = () => { S.pencere = Number(b.dataset.w); try { localStorage.setItem('osg15-pencere', S.pencere); } catch { } ciz(); });
   document.querySelectorAll('#seg button').forEach(b => b.onclick = () => { S.filtre = b.dataset.f; ciz(); });
   $('q').oninput = e => { S.q = e.target.value.toLocaleLowerCase('tr'); const p = e.target.selectionStart; ciz(); $('q').focus(); $('q').setSelectionRange(p, p); };
   document.querySelectorAll('th[data-s]').forEach(th => th.onclick = () => {
@@ -177,7 +204,7 @@ function kaynakSatiri(kn) {
 function dugum(ad, n, derinlik = 0) {
   const alt = n.girdiler ? Object.entries(n.girdiler) : [];
   return `<details class="dg" ${derinlik < 2 ? 'open' : ''}>
-    <summary><span class="dad">${esc(ETIKET[ad] || ad.replace('ODEME_', 'Ödeme '))}</span><span class="ddeg">${bicim(ad, n.deger)}</span></summary>
+    <summary><span class="dad">${esc(etiket(ad) || ad.replace('ODEME_', 'Ödeme '))}</span><span class="ddeg">${bicim(ad, n.deger)}</span></summary>
     <div class="dic">
       ${n.formul ? `<div class="formul">= ${esc(n.formul)}</div>` : ''}${n.not ? `<div class="not">${esc(n.not)}</div>` : ''}
       ${kaynakSatiri(n.kaynak)}
@@ -185,14 +212,14 @@ function dugum(ad, n, derinlik = 0) {
     </div></details>`;
 }
 function kaynakAc(k, o) {
-  const r = S.liste.find(x => x.k === k);
+  const r = aktif().find(x => x.k === k);
   let baslik, govde;
   if (o === '_puan') {
     baslik = `${k} · toplam puan`;
     govde = r.toplam == null ? `<p>Havuz kriterinden elendiği için puanlanmadı.</p>${r.elenme.map(e => `<p class="fail">${esc(e)}</p>`).join('')}` :
       `<p class="formul">= Σ (ağırlık × oran puanı) / 100 = <b>${tr(r.toplam, 2)}</b></p>
        <table class="mini"><tr><th class="l">Oran</th><th>Değer</th><th>Sıra</th><th>Puan</th><th>Ağırlık</th><th>Katkı</th></tr>
-       ${Object.entries(KURAL.agirlik).map(([o2, w]) => `<tr><td class="l">${ORAN_AD[o2]}</td><td>${bicim(o2, r.oranlar[o2].deger)}</td><td>${tr(r.puan[o2].sira, 1)} / ${r.puan[o2].havuz}</td><td>${tr(r.puan[o2].deger, 1)}</td><td>%${w}</td><td>${tr(r.puan[o2].deger * w / 100, 2)}</td></tr>`).join('')}</table>
+       ${Object.entries(KURAL.agirlik).map(([o2, w]) => `<tr><td class="l">${oranAd(o2, S.pencere)}</td><td>${bicim(o2, r.oranlar[o2].deger)}</td><td>${tr(r.puan[o2].sira, 1)} / ${r.puan[o2].havuz}</td><td>${tr(r.puan[o2].deger, 1)}</td><td>%${w}</td><td>${tr(r.puan[o2].deger * w / 100, 2)}</td></tr>`).join('')}</table>
        <p class="not">Oran puanı: en iyi şirkete 100, en kötüye 0, arası eşit aralıklı; eşit değerlerde ortalama sıra. Toplam puan eşitse piyasa değeri büyük olan üstte.</p>`;
   } else if (o === '_bayrak') {
     baslik = `${k} · bayraklar`;
@@ -200,11 +227,11 @@ function kaynakAc(k, o) {
   } else if (o === '_PD') {
     baslik = `${k} · piyasa değeri`; govde = dugum('PD', r.girdiler.PD);
   } else {
-    baslik = `${k} · ${ORAN_AD[o]}`;
+    baslik = `${k} · ${oranAd(o, S.pencere)}`;
     govde = dugum(o, r.oranlar[o]) + (r.puan?.[o] ? `<p class="not">Puan: ${tr(r.puan[o].deger, 1)} — ${esc(r.puan[o].formul)}</p>` : '');
   }
   $('dTitle').textContent = baslik;
-  $('dBody').innerHTML = `<p class="muted">${esc(r.u)} · ${esc(r.nitelik)} · ${r.ay} aylık rapor · <a href="${r.kap}" target="_blank" rel="noopener">KAP bildirimi</a>${r.fy ? ` · <a href="${r.fy}" target="_blank" rel="noopener">Yıllık rapor</a>` : ''}</p>${govde}`;
+  $('dBody').innerHTML = `<p class="muted">${esc(r.u)} · ${S.pencere} aylık sıralama · ${esc(r.nitelik)} · ${r.ay} aylık rapor · <a href="${r.kap}" target="_blank" rel="noopener">KAP bildirimi</a>${r.fy ? ` · <a href="${r.fy}" target="_blank" rel="noopener">Yıllık rapor</a>` : ''}</p>${govde}`;
   $('drawer').hidden = false;
 }
 $('dClose').onclick = () => { $('drawer').hidden = true; };
@@ -306,10 +333,11 @@ function vYontem() {
     <li><b>Finansal tablolar</b> doğrudan KAP bildirim sayfalarındaki XBRL tablolarından okunur. Her sayının yanında bildirim numarası, XBRL kalem adı ve dönem sütunu saklanır.</li>
     <li><b>Kira geliri</b> gelir tablosunda ayrı kalem olmadığı için dipnottan tespit edilir; bu tespit karar hafızasında tutulur.</li>
     <li><b>Fiyat, piyasa değeri, temettü:</b> ${esc(S.seed.fiyatKaynagi)}, ${esc(S.seed.fiyatTarihi)}. Değerleme gününde güncellenmeli (sonraki aşama).</li>
-    <li><b>FAVÖK, hasılat ve kira geliri (son 12 ay)</b> = cari dönem + son yıllık × TÜFE katsayısı − önceki yıl aynı dönem. Yıllık ve önceki yıl kira tutarları veri tablosundaki dipnot okumalarından gelir.</li></ul></div>
+    <li><b>FAVÖK, hasılat ve kira geliri (son 12 ay)</b> = cari dönem + son yıllık × TÜFE katsayısı − önceki yıl aynı dönem. Yıllık ve önceki yıl kira tutarları veri tablosundaki dipnot okumalarından gelir.</li>
+    <li><b>Son 6 ay ve son 3 ay</b> (Sıralama'daki 6 aylık / 3 aylık sekmeleri) = son rapor − aynı yılın 3 ya da 6 aylık ara raporu × TÜFE katsayısı (ara rapor dönem sonu → son rapor dönem sonu). Ara rapordaki kira dipnottan okunur; elle kontrol edilenler <code>data/kira-elle.json</code> içinde (rapor3, rapor6). Kira/Varlık ve FAVÖK/FD için pencere tutarı × 12/ay ile yıllığa çevrilir; Kira/Hasılat oranı çevrilmez. Bilanço kalemleri, piyasa değeri ve temettü üç sekmede de aynıdır.</li></ul></div>
    <div class="card"><h3>2. Kural seti</h3><ul>
     <li>Evren: KAP'ta GYO statüsündeki şirketler.</li>
-    <li>Eleme: Yükümlülük/Varlık > %85, ya da Kira/Hasılat < %15 <i>ve</i> Kira/Varlık < %2,5 (ikisi de son 12 ay).</li>
+    <li>Eleme: Yükümlülük/Varlık > %85, ya da Kira/Hasılat < %15 <i>ve</i> Kira/Varlık < %2,5 (ikisi de seçili pencere: son 12, 6 ya da 3 ay).</li>
     <li>Puan: PD/DD %50, FAVÖK/FD %20, temettü verimi %20, cari oran %5, Yük./Varlık %5. Her oranda en iyiye 100, en kötüye 0.</li>
     <li>İlk 15 endeks, sonraki 2 yedek. Eşitlikte piyasa değeri büyük olan üstte.</li></ul></div>
    <div class="card"><h3>3. Öğrenme</h3><ul>
