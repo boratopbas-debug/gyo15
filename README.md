@@ -63,6 +63,22 @@ python3 scripts/tarihsel/veri.py indir    # gereken dipnot ve faaliyet raporu PD
 
 Flag türleri: **Doğrulanamadı** (veri iki kaynakta teyit edilemedi), **Çelişki** (iki kaynak farklı), **Tahmini**, **Çıkarım** (karar hafızasından), **Teyitli**. Endeks/yedek sınırındaki teyitsiz veriler "kritik" olarak grafikte de gösterilir.
 
+## Son 12 / 6 / 3 ay sıralaması
+
+Sıralama sayfasında üç sekme var: **12 aylık**, **6 aylık**, **3 aylık**. Pencere yalnızca akım kalemlerini (FAVÖK, hasılat, kira geliri) değiştirir; bilanço, piyasa değeri ve temettü aynı kalır.
+
+- 12 ay = cari dönem + son yıllık × TÜFE katsayısı − önceki yıl aynı dönem.
+- 6 ay = son rapor − aynı yılın 3 aylık ara raporu × TÜFE katsayısı; 3 ay = son rapor − 6 aylık ara rapor × TÜFE katsayısı. Katsayı ara rapor dönem sonundan son rapor dönem sonuna (`build.TUFE_L`).
+- Kira/Varlık ve FAVÖK/FD için 6 ve 3 aylık tutarlar × 12/ay ile yıllığa çevrilir; Kira/Hasılat çevrilmez.
+- Ara rapordaki kira dipnottan okunur; elle kontrol edilenler `data/kira-elle.json` içinde `rapor3` / `rapor6` anahtarlarıyla.
+- Köprüler `veri.json` satırlarında `pencere["6"]`, `pencere["3"]`; motor `public/lib/engine.mjs` (`pencereHesapla`).
+- Excel: `OSG15_GYO_Veri.xlsx` (6 ay ve 3 ay köprüsü sayfaları) ve `OSG15_Siralama.xlsx` (Endeks 12/6/3 ay + Karşılaştırma):
+
+```bash
+python3 scripts/tarihsel/veri.py indir
+node scripts/siralama.mjs && python3 scripts/tarihsel/siralama_excel.py
+```
+
 ## Netlify kurulumu
 
 1. Bu repoyu Netlify'da **Add new site → Import an existing project** ile bağla. Build command boş, publish `public` (netlify.toml'da tanımlı).

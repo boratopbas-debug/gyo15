@@ -1,5 +1,5 @@
 {
-  "_aciklama": "Kira geliri için elle kontrol edilmiş tutarlar (23.11.2026). Otomatik dipnot okuması çok satırlı/bölümlü tablolarda ya da taranmış PDF'lerde yanlış veya boş kaldığında burası esas alınır. Dönemler: donem = son rapor (kümülatif), yillik = son yıllık rapor, onceki = önceki yılın aynı dönemi (son rapordaki karşılaştırmalı sütun, cari dönem alım gücünde). tespit: dogrudan | yorum | tahmini. tutar TL. tutar_eski: önceki yıl raporunun kendi TL'si, TÜFE ile cari dönem sonuna taşınır. formul: yillik_orantili (yıllık kira × katsayı × ay/12), donem_ile_ayni (önceki = dönem; 12 ay = yıllık × katsayı), oran_yillik (önceki yıl hasılatı × yıllık kira/hasılat oranı).",
+  "_aciklama": "Kira geliri için elle kontrol edilmiş tutarlar (23.11.2026). Otomatik dipnot okuması çok satırlı/bölümlü tablolarda ya da taranmış PDF'lerde yanlış veya boş kaldığında burası esas alınır. Dönemler: donem = son rapor (kümülatif), yillik = son yıllık rapor, onceki = önceki yılın aynı dönemi (son rapordaki karşılaştırmalı sütun, cari dönem alım gücünde). tespit: dogrudan | yorum | tahmini. tutar TL. tutar_eski: önceki yıl raporunun kendi TL'si, TÜFE ile cari dönem sonuna taşınır. formul: yillik_orantili (yıllık kira × katsayı × ay/12), donem_ile_ayni (önceki = dönem; 12 ay = yıllık × katsayı), oran_yillik (önceki yıl hasılatı × yıllık kira/hasılat oranı). rapor3 / rapor6: son 6 ay ve son 3 ay köprüsünde kullanılan aynı yılın 3 ve 6 aylık ara raporlarının kümülatif kirası (ara rapor alım gücünde); hasilat verilirse ara rapor hasılatı da bununla değiştirilir.",
   "AHSGY": {
     "yillik": {
       "tutar": 42526937,
@@ -40,7 +40,17 @@
       "tespit": "dogrudan",
       "kaynak": "FY25 yatırım amaçlı gayrimenkul dipnotu: \"Kira geliri 143,103,613\""
     },
-    "not": "Kira geliri yatırım amaçlı gayrimenkul dipnotundan; 9A25 ve FY25'te kira tutarı hasılattan büyük (hasılat satış iadeleriyle net). "
+    "not": "Kira geliri yatırım amaçlı gayrimenkul dipnotundan; 9A25 ve FY25'te kira tutarı hasılattan büyük (hasılat satış iadeleriyle net). ",
+    "rapor3": {
+      "tutar": 29815542,
+      "tespit": "dogrudan",
+      "kaynak": "3A26 yatırım amaçlı gayrimenkul dipnotu: \"Kira geliri 29,815,542\""
+    },
+    "rapor6": {
+      "tutar": 73280497,
+      "tespit": "dogrudan",
+      "kaynak": "6A26 yatırım amaçlı gayrimenkul dipnotu: \"Kira geliri 73,280,497\" (hasılat 72,5 mn TL; iadeler nedeniyle kira hasılattan büyük)"
+    }
   },
   "IDGYO": {
     "yillik": {
@@ -69,6 +79,16 @@
       "tutar": 1767262938,
       "tespit": "dogrudan",
       "kaynak": "FY25 yatırım amaçlı gayrimenkul dipnotu: \"Kira gelirleri 1.767.262.938\" (bölüm tablosu toplamıyla aynı)"
+    },
+    "rapor3": {
+      "tutar": 498141837,
+      "tespit": "dogrudan",
+      "kaynak": "3A26 yatırım amaçlı gayrimenkul dipnotu: \"Kira gelirleri 498.141.837\" (9A26 ile aynı kalem)"
+    },
+    "rapor6": {
+      "tutar": 1074097653,
+      "tespit": "dogrudan",
+      "kaynak": "6A26 yatırım amaçlı gayrimenkul dipnotu: \"Kira gelirleri 1.074.097.653\""
     }
   },
   "KGYO": {
@@ -93,6 +113,16 @@
       "tutar": 112874281,
       "tespit": "dogrudan",
       "kaynak": "FY25 dipnot: Kira gelirleri 113.285.727 − iadeler 411.446"
+    },
+    "rapor3": {
+      "tutar": 35808101,
+      "tespit": "dogrudan",
+      "kaynak": "3A26 dipnot: Kira Gelirleri 36.096.304 − kira gelirlerinden iadeler 288.203"
+    },
+    "rapor6": {
+      "tutar": 77898322,
+      "tespit": "dogrudan",
+      "kaynak": "6A26 dipnot 14 (taranmış PDF, OCR): Kira Gelirleri 78.207.831 − iadeler 309.509; toplam 87.461.290 XBRL hasılatla aynı"
     }
   },
   "OZGYO": {
@@ -110,6 +140,16 @@
       "tutar": 156409828,
       "tespit": "dogrudan",
       "kaynak": "FY25 dipnot: 117.749.307 + 38.660.521"
+    },
+    "rapor3": {
+      "tutar": 50466116,
+      "tespit": "dogrudan",
+      "kaynak": "3A26 dipnot: Kira Gelirleri (Nuvo Dragos + YK Plaza) 36.638.782 + Kira Gelirleri (İngiltere) 13.827.334"
+    },
+    "rapor6": {
+      "tutar": 103447387,
+      "tespit": "dogrudan",
+      "kaynak": "6A26 dipnot: Kira Gelirleri (Nuvo Dragos + YK Plaza) 74.134.644 + Kira Gelirleri (İngiltere) 29.312.743"
     }
   },
   "PEKGY": {
@@ -134,6 +174,16 @@
       "tutar": 3597880009,
       "tespit": "yorum",
       "kaynak": "FY25 dipnot: Yurtiçi satış gelirleri 3.613.643.716 − indirimler 15.763.707 (brüt satış − hasılat). Faaliyet raporu FY25 kira gelirini 3.613.643.716 TL veriyor."
+    },
+    "rapor3": {
+      "tutar": 1011867482,
+      "tespit": "yorum",
+      "kaynak": "3A26 dipnot: Yurtiçi satışlar 1.017.177.170 − satış iadeleri 5.309.688 (9A26 ile aynı yorum)"
+    },
+    "rapor6": {
+      "tutar": 2029616910,
+      "tespit": "yorum",
+      "kaynak": "6A26 dipnot: Yurtiçi satışlar 2.053.611.112 − satış iadeleri 23.994.202"
     }
   },
   "SEGYO": {
@@ -146,6 +196,16 @@
       "tutar": 175018091,
       "tespit": "dogrudan",
       "kaynak": "FY25 dipnot 22a (taranmış PDF, OCR): \"Gayrimenkul kira gelirleri 175.018.091\"; hasılat toplamı 426.650.344 XBRL ile aynı"
+    },
+    "rapor3": {
+      "tutar": 51011903,
+      "tespit": "dogrudan",
+      "kaynak": "3A26 dipnot: \"Gayrimenkul kira gelirleri 51.011.903\""
+    },
+    "rapor6": {
+      "tutar": 110026349,
+      "tespit": "dogrudan",
+      "kaynak": "6A26 dipnot: \"Gayrimenkul kira gelirleri 110.026.349\""
     }
   },
   "SNGYO": {
@@ -163,6 +223,16 @@
       "tutar": 181635160,
       "tespit": "dogrudan",
       "kaynak": "FY25 dipnot: \"Kira Gelirleri 181.635.160\""
+    },
+    "rapor3": {
+      "tutar": 42843777.27,
+      "tespit": "yorum",
+      "kaynak": "3A26 faaliyet raporu kira tablosu: \"01.01.2026-31.03.2026 Toplam Kira Geliri 42.843.777,27\" (dipnotta kırılım yok)"
+    },
+    "rapor6": {
+      "tutar": 98651370.43,
+      "tespit": "yorum",
+      "kaynak": "6A26 faaliyet raporu kira tablosu: \"01.01.2026-30.06.2026 Toplam Kira Geliri 98.651.370,43\""
     }
   },
   "SRVGY": {
@@ -192,6 +262,16 @@
       "tutar": 207935015,
       "tespit": "dogrudan",
       "kaynak": "FY25 bölüm tablosu toplamı: 207.935.015"
+    },
+    "rapor3": {
+      "tutar": 61255058,
+      "tespit": "dogrudan",
+      "kaynak": "3A26 bölüm tablosu \"Kira geliri\" satırı toplamı 61.255.058 (9A26 ile aynı satır; toplam gayrimenkul gelirleri 64.536.977)"
+    },
+    "rapor6": {
+      "tutar": 129869117,
+      "tespit": "dogrudan",
+      "kaynak": "6A26 bölüm tablosu \"Kira geliri\" satırı toplamı 129.869.117"
     }
   },
   "YGGYO": {
@@ -216,6 +296,16 @@
       "tutar": 11649948,
       "tespit": "dogrudan",
       "kaynak": "FY25 dipnot: \"Yurt İçi Satışlar (*) 11.649.948\" ((*) Bilfen kira geliri)"
+    },
+    "rapor3": {
+      "tutar": 3130364,
+      "tespit": "dogrudan",
+      "kaynak": "3A26 dipnot: \"Yurt İçi Satışlar (*) 3.130.364\" ((*) Bilfen kira geliri)"
+    },
+    "rapor6": {
+      "tutar": 6447720,
+      "tespit": "dogrudan",
+      "kaynak": "6A26 dipnot: \"Yurt İçi Satışlar (*) 6.447.720\""
     }
   },
   "ADGYO": {
@@ -230,6 +320,16 @@
       "tutar": 4097338698,
       "tespit": "dogrudan",
       "kaynak": "FY25 dipnot: Akasya 2.746.772.350 + Akbatı 1.195.254.404 + Diğer kira gelirleri 155.311.944"
+    },
+    "rapor3": {
+      "tutar": 1116687000,
+      "tespit": "dogrudan",
+      "kaynak": "3A26 dipnot (bin TL): Akasya 745.044 + Akbatı 332.027 + Diğer kira gelirleri 39.616"
+    },
+    "rapor6": {
+      "tutar": 2438724000,
+      "tespit": "dogrudan",
+      "kaynak": "6A26 dipnot (bin TL): Akasya 1.642.942 + Akbatı 707.367 + Diğer kira gelirleri 88.415"
     }
   },
   "AKMGY": {
@@ -237,6 +337,16 @@
       "tutar": 1013408137,
       "tespit": "dogrudan",
       "kaynak": "FY25 dipnot: Mağaza ve depo kira gelirleri 950.140.187 + Apart otel kira geliri 63.267.950"
+    },
+    "rapor3": {
+      "tutar": 276038601,
+      "tespit": "dogrudan",
+      "kaynak": "3A26 dipnot: Mağaza ve depo kira gelirleri 260.461.837 + Apart otel kira geliri 15.576.764"
+    },
+    "rapor6": {
+      "tutar": 576537000,
+      "tespit": "dogrudan",
+      "kaynak": "6A26 dipnot (bin TL): Mağaza ve depo kira gelirleri 547.181 + Apart otel kira geliri 29.356"
     }
   },
   "FZLGY": {
@@ -251,6 +361,16 @@
       "tutar": 39060510,
       "tespit": "dogrudan",
       "kaynak": "FY25 dipnot: Devremülk ve konut kira gelirleri 24.200.600 + Yatırım amaçlı gayrimenkul kira geliri 14.859.910 (kira sertifikası kâr payları hariç)"
+    },
+    "rapor3": {
+      "tutar": 7547261,
+      "tespit": "dogrudan",
+      "kaynak": "3A26 dipnot: Devremülk ve konut kira gelirleri 3.051.059 + Yatırım amaçlı gayrimenkul kira geliri 4.496.202"
+    },
+    "rapor6": {
+      "tutar": 16284417,
+      "tespit": "dogrudan",
+      "kaynak": "6A26 dipnot: Devremülk ve konut kira gelirleri 8.762.007 + Yatırım amaçlı gayrimenkul kira geliri 7.522.410"
     }
   },
   "ZRGYO": {
@@ -258,6 +378,31 @@
       "tutar": 2376993894,
       "tespit": "dogrudan",
       "kaynak": "FY25 hasılat dipnotu: Yurt içi kira gelirleri 2.270.664.089 + Yurt dışı kira gelirleri 106.329.805"
+    },
+    "rapor3": {
+      "tutar": 635965000,
+      "tespit": "dogrudan",
+      "kaynak": "3A26 hasılat dipnotu: Yurt içi kira gelirleri 603.322.418 + Yurt dışı kira gelirleri 32.642.582"
+    },
+    "rapor6": {
+      "tutar": 1447668794,
+      "tespit": "dogrudan",
+      "kaynak": "6A26 hasılat dipnotu: Yurt içi kira gelirleri 1.382.070.973 + Yurt dışı kira gelirleri 65.597.821"
+    }
+  },
+  "AVGYO": {
+    "rapor3": {
+      "tutar": 25182666,
+      "hasilat": 25182666,
+      "tespit": "yorum",
+      "kaynak": "3A26 raporundaki 173,1 mn TL satış geliri 6A26 raporunda yok (Ocak–Haziran hasılatı 47.271.915, tamamı kira). Ocak–Mart, 6A26 rakamlarından türetildi: 47.271.915 − Nisan–Haziran 20.323.088 = 26.948.827 (Haziran TL), Mart TL'ye çevrildi (÷1.0701). FAVÖK 3A26 raporundan, düzeltilmedi."
+    }
+  },
+  "AAGYO": {
+    "rapor6": {
+      "tutar": 199946177,
+      "tespit": "dogrudan",
+      "kaynak": "6A26 hasılat dipnotu: \"Kira Gelirleri 199.946.177\""
     }
   }
 }

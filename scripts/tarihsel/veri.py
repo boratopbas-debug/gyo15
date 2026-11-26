@@ -38,11 +38,36 @@ def raporlar(k):
     return s, fy, ob
 
 
+def ay_sonu_geri(d, n):
+    """d ay sonundan n ay önceki ay sonu."""
+    y, m = d.year, d.month - n
+    while m <= 0:
+        m += 12; y -= 1
+    return (dt.date(y + (m == 12), m % 12 + 1, 1) - dt.timedelta(days=1))
+
+
+def ara_rapor(k, s, w):
+    """Son 'w' ay penceresi için çıkarılacak ara rapor: aynı mali yılın (ay − w) aylık raporu, dönem sonu w ay önce."""
+    a = s['ay']
+    if w >= a:
+        return None
+    hedef = ay_sonu_geri(s['donemSonu'], w)
+    sinir = dt.datetime.combine(BUGUN, dt.time(23, 59))
+    c = [x for x in B.KAT.get(k, []) if x['ay'] == a - w and x['donemSonu'] == hedef and x['yayim'] <= sinir]
+    ayni = [x for x in c if x['nitelik'] == s['nitelik']] or c
+    return max(ayni, key=lambda x: x['yayim']) if ayni else None
+
+
+PENCERE = (6, 3)
+
+
 def plan():
     """İndirilecek dipnot ve faaliyet raporu PDF'leri."""
     gerek = {}
     for k in B.UNVAN:
-        for x in raporlar(k):
+        s = raporlar(k)[0]
+        aralar = [ara_rapor(k, s, w) for w in PENCERE] if s else []
+        for x in list(raporlar(k)) + aralar:
             if not x:
                 continue
             r = rapor(x['idx'])
@@ -256,8 +281,9 @@ def sirket(k):
         fl.append(F('celiski', f'12 aylık kira negatif çıktı ({kira_l/1e6:,.1f} mn TL); önceki yıl tutarı kontrol edilmeli', 'kritik'))
     if kira_l and REV_l and kira_l > REV_l * 1.01:
         fl.append(F('celiski', '12 aylık kira 12 aylık hasılattan büyük çıktı', 'uyari'))
+    pen = {str(w): pencere(k, s, r, c, ay, REV_c, fav_c, KC, tip, el, w, fl) for w in PENCERE}
     bilesen = [X[1] for X in (KF, KO) if X]
-    kira_12 = 'Doğrudan' if all(b_ == 'Doğrudan' for b_ in bilesen + [KC[1]]) else ('Tahmini' if 'Tahmini' in bilesen + [KC[1]] else 'Yorum')
+    kira_12 ='Doğrudan' if all(b_ == 'Doğrudan' for b_ in bilesen + [KC[1]]) else ('Tahmini' if 'Tahmini' in bilesen + [KC[1]] else 'Yorum')
     if (ay != 12 and not fy) or kira_ltm_formul:
         kira_12 = 'Tahmini'
     row.update({
@@ -276,9 +302,95 @@ def sirket(k):
                  'faaliyetSatir': [x['metin'] for x in fa_csat][:4], 'faaliyetTeyit': fa_c_ok, 'yillikFaaliyetTeyit': fa_f_ok},
         'favok': {'donem': fav_c, 'yillik': fav_f, 'onceki': fav_o, 'ltm': fav_l},
         'oran': {'kg': kira_l / REV_l if REV_l else None, 'kv': kira_l / TA if TA and kira_l is not None else None},
+        'pencere': pen,
     })
+    for w, p in pen.items():
+        p['oran'] = {'kg': p['kira']['deger'] / p['hasilat']['deger'] if p['hasilat']['deger'] else None,
+                     'kv': p['kira']['deger'] * 12 / int(w) / TA if TA else None}
     row['kiraFlag'] = KC[1] != 'Doğrudan' or kira_12 != 'Doğrudan'
     return row
+
+
+# ---------------------------------------------------------------- son 6 ay / son 3 ay
+def ara_kira(k, e, re_, ce, REV_e, tip, el, oran_c):
+    """Ara rapordaki (ör. 3A26, 6A26) kümülatif kira: (tutar TL, tespit, kaynak)."""
+    anahtar = f"rapor{e['ay']}"
+    if el.get(anahtar):
+        x = el[anahtar]
+        return float(x['tutar']), {'dogrudan': 'Doğrudan', 'yorum': 'Yorum', 'tahmini': 'Tahmini'}[x['tespit']], 'Elle kontrol: ' + x['kaynak']
+    if tip in ('tamami', 'sifir'):
+        return (REV_e if tip == 'tamami' else 0.0), None, 'Karar hafızası kuralı ara rapora uygulandı'
+    me = B.metin(e['idx'])
+    if me and REV_e:
+        REV_eo, _ = kalem(re_, 'REV', 1)
+        o = K.iki_sutun(me, REV_e / ce, (REV_eo or 0) / ce)
+        t = K.dipnot(me, REV_e / ce)
+        v, dur, nt = (o['cari'], o['durum'], o['not']) if o['cari'] is not None else (t['tutar'], t['durum'], t['not'])
+        if v is not None:
+            return v * ce, 'Doğrudan' if dur == 'bulundu' else 'Yorum', f"{e['ay']} aylık raporun hasılat dipnotu (otomatik okuma): {nt}"
+    neden = "dipnotlu PDF metne çevrilemedi" if not me else 'dipnotta kira satırı okunamadı'
+    return oran_c * (REV_e or 0.0), 'Tahmini', f"{e['ay']} aylık rapor: {neden}; son dönem kira/hasılat oranı (%{oran_c*100:.1f}) × ara rapor hasılatı"
+
+
+def pencere(k, s, r, c, ay, REV_c, fav_c, KC, tip, el, w, fl):
+    """Son w ay = son rapor (kümülatif) − aynı mali yılın (ay − w) aylık raporu × TÜFE katsayısı.
+    Ara rapor, kendi dönem sonu alım gücünde olduğu için son raporun dönem sonuna taşınır."""
+    kc = KC[0]
+    oran_c = kc / REV_c if REV_c else 0.0
+    out = {'w': w, 'donemSonu': s['donemSonu'].isoformat(), 'bas': (ay_sonu_geri(s['donemSonu'], w) + dt.timedelta(days=1)).isoformat()}
+    if w == ay:
+        out.update({'yontem': 'dogrudan', 'formul': f'Son rapor zaten {w} aylık', 'ara': None, 'kf': None,
+                    'hasilat': {'deger': REV_c, 'cari': REV_c, 'ara': None}, 'favok': {'deger': fav_c, 'cari': fav_c, 'ara': None},
+                    'kira': {'deger': kc, 'cari': kc, 'ara': None, 'tespit': KC[1], 'cariKaynak': KC[2], 'araKaynak': None, 'araTespit': None}})
+        return out
+    e = ara_rapor(k, s, w) if w < ay else None
+    kf = B.katsayi(dt.date.fromisoformat(e['donemSonu'].isoformat()), s['donemSonu']) if e else None
+    if not e or not kf:
+        neden = (f"{ay - w} aylık ara rapor KAP'ta bulunamadı" if w < ay else f'Son rapor {ay} aylık, {w} aydan kısa') if not e else 'TÜFE katsayısı bulunamadı'
+        fl.append(F('tahmini', f'Son {w} ay: {neden}; dönem × {w}/{ay} ile orantılandı', 'uyari'))
+        out.update({'yontem': 'orantili', 'formul': f'{ay} ay × {w}/{ay}', 'ara': None, 'kf': None,
+                    'hasilat': {'deger': REV_c * w / ay, 'cari': REV_c, 'ara': None}, 'favok': {'deger': fav_c * w / ay, 'cari': fav_c, 'ara': None},
+                    'kira': {'deger': kc * w / ay, 'cari': kc, 'ara': None, 'tespit': 'Tahmini', 'cariKaynak': KC[2], 'araKaynak': None, 'araTespit': None}})
+        return out
+    re_ = rapor(e['idx']); ce = carpan(re_)
+    REV_e = kalem(re_, 'REV', 0)[0] or 0.0
+    fav_e, _ = B.favok(re_, 0)
+    xe = el.get(f"rapor{e['ay']}") or {}
+    if 'hasilat' in xe:
+        REV_e = float(xe['hasilat'])
+        fl.append(F('veri', f"Son {w} ay: {e['ay']} aylık ara rapor hasılatı elle düzeltildi — {xe['kaynak']}"[:300], 'uyari'))
+    ke, te, kay = ara_kira(k, e, re_, ce, REV_e, tip, el, oran_c)
+    te = te or KC[1]
+    kira_w = kc - ke * kf
+    tespit = 'Doğrudan' if KC[1] == te == 'Doğrudan' else ('Tahmini' if 'Tahmini' in (KC[1], te) else 'Yorum')
+    rev_w = REV_c - REV_e * kf
+    out.update({'yontem': 'kopru', 'formul': f'{ay} ay − {e["ay"]} ay × {kf:.4f}',
+                'ara': {'idx': e['idx'], 'url': kap(e['idx']), 'ay': e['ay'], 'donemSonu': e['donemSonu'].isoformat(), 'nitelik': e['nitelik']}, 'kf': kf,
+                'hasilat': {'deger': rev_w, 'cari': REV_c, 'ara': REV_e}, 'favok': {'deger': fav_c - fav_e * kf, 'cari': fav_c, 'ara': fav_e},
+                'kira': {'deger': kira_w, 'cari': kc, 'ara': ke, 'tespit': tespit, 'cariKaynak': KC[2], 'araKaynak': kay, 'araTespit': te}})
+    if e['nitelik'] != s['nitelik']:
+        fl.append(F('veri', f"Son {w} ay: ara rapor {e['nitelik'].lower()}, son rapor {s['nitelik'].lower()}"))
+    if te == 'Tahmini':
+        fl.append(F('tahmini', f'Son {w} ay kira: {kay}', 'uyari'))
+    elif te != 'Doğrudan' and te != KC[1]:
+        fl.append(F('cikarim', f'Son {w} ay kira ({e["ay"]} aylık rapor) yorum: {kay}'[:300], 'uyari'))
+    if kira_w < -0.005 * max(abs(kc), 1):
+        fl.append(F('celiski', f'Son {w} ay kira negatif çıktı ({kira_w/1e6:,.1f} mn TL): {e["ay"]} aylık rapordaki kira × TÜFE son rapordaki kümülatif kiradan büyük; sınıflama farkı olabilir', 'kritik'))
+    elif rev_w > 0 and kira_w > rev_w * 1.01:
+        fl.append(F('celiski', f'Son {w} ay kira ({kira_w/1e6:,.1f} mn) aynı dönem hasılatından ({rev_w/1e6:,.1f} mn) büyük', 'uyari'))
+    if rev_w < -0.005 * max(abs(REV_c), 1):
+        fl.append(F('celiski', f'Son {w} ay hasılat negatif çıktı ({rev_w/1e6:,.1f} mn TL)', 'uyari'))
+    # XBRL'de çeyrek sütunu varsa son 3 ay hasılatını şirketin kendi rakamıyla karşılaştır
+    if w == 3:
+        for t in r['tablolar'].values():
+            v = t['rows'].get('ifrs-full_Revenue')
+            if v and len(v) >= 4 and v[1] is not None and v[2] is not None:
+                q = v[2] * c
+                out['hasilat']['sirketCeyrek'] = q
+                if not yaklasik(q, rev_w, 0.02) and max(abs(q), abs(rev_w)) > 1e6:
+                    fl.append(F('celiski', f'Son 3 ay hasılat köprüden {rev_w/1e6:,.1f} mn, şirketin gelir tablosundaki çeyrek sütunu {q/1e6:,.1f} mn TL', 'bilgi'))
+                break
+    return out
 
 
 # ---------------------------------------------------------------- Excel
@@ -376,6 +488,52 @@ def excel(rows, yol):
         for col in (7, 11, 15):
             ws2.cell(row=i, column=col).font = Font(bold=True)
 
+    # 2b) 6 ay ve 3 ay köprüleri (formüllü)
+    for w in PENCERE:
+        wsw = wb.create_sheet(f'{w} ay köprüsü')
+        Bw = ['Kod', 'Son rapor (ay)', 'Ara rapor (ay)', 'Ara rapor dönem sonu', 'TÜFE katsayısı (ara → son)',
+              'Hasılat son rapor', 'Hasılat ara rapor', f'Hasılat {w} ay',
+              'Kira son rapor', 'Kira ara rapor', f'Kira {w} ay',
+              'FAVÖK son rapor', 'FAVÖK ara rapor', f'FAVÖK {w} ay',
+              'Toplam varlıklar', f'Kira/Hasılat ({w} ay)', f'Kira/Varlık ({w} ay, yıllık)',
+              'Kira tespiti', 'Kira ara rapor kaynağı', 'Ara rapor (KAP)']
+        basla(wsw, Bw, [8, 8, 8, 12, 11, 17, 17, 17, 17, 17, 17, 17, 17, 17, 18, 11, 11, 11, 60, 34])
+        for r in rows:
+            p_ = (r.get('pencere') or {}).get(str(w))
+            if not p_:
+                continue
+            i = wsw.max_row + 1
+            a_ = p_['ara'] or {}
+            if p_['yontem'] == 'kopru':
+                fh, fk, ff = f'=F{i}-G{i}*E{i}', f'=I{i}-J{i}*E{i}', f'=L{i}-M{i}*E{i}'
+            elif p_['yontem'] == 'orantili':
+                fh, fk, ff = f'=F{i}*{w}/B{i}', f'=I{i}*{w}/B{i}', f'=L{i}*{w}/B{i}'
+            else:
+                fh, fk, ff = f'=F{i}', f'=I{i}', f'=L{i}'
+            wsw.append([r['k'], r['ay'], a_.get('ay'), dt.date.fromisoformat(a_['donemSonu']) if a_ else None, p_['kf'],
+                        p_['hasilat']['cari'], p_['hasilat']['ara'], fh, p_['kira']['cari'], p_['kira']['ara'], fk,
+                        p_['favok']['cari'], p_['favok']['ara'], ff, r['TA'], f'=IF(H{i}=0,"",K{i}/H{i})', f'=IF(O{i}=0,"",K{i}*12/{w}/O{i})',
+                        p_['kira']['tespit'], (f"[{p_['kira']['araTespit']}] {p_['kira']['araKaynak']}" if p_['kira']['araKaynak'] else
+                                               ('Ara rapor yok: son rapor × ' + str(w) + '/' + str(r['ay']) if p_['yontem'] == 'orantili' else '')),
+                        a_.get('url')])
+            wsw.cell(row=i, column=4).number_format = 'DD.MM.YYYY'
+            wsw.cell(row=i, column=5).number_format = '0.0000'
+            for col in range(6, 16):
+                wsw.cell(row=i, column=col).number_format = TL
+            for col in (16, 17):
+                wsw.cell(row=i, column=col).number_format = YZ
+            for col in (8, 11, 14):
+                wsw.cell(row=i, column=col).font = Font(bold=True)
+            if p_['kira']['tespit'] != 'Doğrudan':
+                for col in (10, 11, 18):
+                    wsw.cell(row=i, column=col).fill = flag_fill
+            if p_['kira']['deger'] < 0 or p_['yontem'] != 'kopru':
+                wsw.cell(row=i, column=11).fill = kirm
+            cl = wsw.cell(row=i, column=20)
+            if cl.value:
+                cl.hyperlink = cl.value; cl.font = Font(color='0F6B5C', underline='single')
+        wsw.auto_filter.ref = f'A1:{get_column_letter(len(Bw))}{wsw.max_row}'
+
     # 3) Flagler
     ws3 = wb.create_sheet('Flagler')
     basla(ws3, ['Kod', 'Şirket', 'Tür', 'Seviye', 'Açıklama'], [8, 30, 16, 9, 120])
@@ -416,6 +574,13 @@ ACIKLAMA = [
     '   "Kira tespiti (12 ay)" yıllık rapor ve önceki yıl bileşenlerinin en zayıfını gösterir. Flag\'li hücreler sarı; ayrıntı "Flagler" ve "12 ay köprüsü" sayfalarında.',
     'Elle kontrol: otomatik okumanın yetmediği (çok satırlı/bölümlü tablolar, taranmış PDF) şirketlerde tutarlar dipnot ve faaliyet raporundan elle okundu; kaynak satırı köprü sayfasında yazılı (repo: data/kira-elle.json).',
     '"12 ay köprüsü" sayfasında her bileşen ayrı ve 12 ay sütunları Excel formülüdür; kontrol için kullanılabilir.',
+    '',
+    'Son 6 ay ve son 3 ay ("6 ay köprüsü", "3 ay köprüsü" sayfaları):',
+    '   Son w ay = son rapor (kümülatif) − aynı mali yılın ara raporu × TÜFE katsayısı. 9 aylık raporda: son 6 ay = 9A − 3A × katsayı (Nisan–Eylül), son 3 ay = 9A − 6A × katsayı (Temmuz–Eylül).',
+    '   Ara rapor kendi dönem sonunun alım gücündedir; katsayı (ör. 30.06 → 30.09) KAP\'taki yeniden düzenlenmiş bilançolardan türetilen TÜFE seviyelerinden gelir.',
+    '   Ara rapordaki kira dipnottan okunur; otomatik okumanın yetmediği yerler data/kira-elle.json içinde (rapor3, rapor6) elle kontrol edilmiş tutarlardır.',
+    '   Son rapor zaten 6 aylıksa (PEKGY, MRGYO) son 6 ay = son rapor. Ara rapor yoksa (BKRGY) son rapor × w/ay ile orantılanır ve flag\'lenir.',
+    '   Kira/Varlık oranında pencere kirası × 12/w ile yıllığa çevrilir (eşik %2,5 yıllık). Kira/Hasılat oranı çevrilmez.',
 ]
 
 
